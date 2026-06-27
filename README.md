@@ -1,4 +1,5 @@
-# Dwarpal — A Production-Inspired OIDC Identity Provider
+# Open-Pravesh
+— A Production-Inspired OIDC Identity Provider
 
 A from-scratch authentication and authorization platform implementing **OAuth 2.1** and **OpenID Connect**, built to deeply understand how modern identity providers work under the hood — conceptually similar to a simplified Auth0 or Keycloak.
 
