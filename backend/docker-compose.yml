@@ -1,0 +1,25 @@
+name: open-pravesh
+
+services:
+  postgres:
+    image: postgres:17
+    container_name: open-pravesh-postgres
+
+    ports:
+      - "5432:5432"
+
+    environment:
+      POSTGRES_USER: janardan
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: openpravesh
+
+    volumes:
+      - open_pravesh_postgres_data:/var/lib/postgresql/data
+
+    restart: unless-stopped
+
+volumes:
+  open_pravesh_postgres_data:
+
+
+# postgresql://janardan:postgres@localhost:5432/openpravesh
