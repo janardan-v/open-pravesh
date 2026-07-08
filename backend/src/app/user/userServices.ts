@@ -4,7 +4,6 @@ import db from "../../db/index.ts";
 import { eq } from "drizzle-orm";
 import ApiError from "../../common/utils/apiError.ts";
 import ApiResponse from "../../common/utils/apiResponse.ts";
-import crypto from "crypto"
 
 import { password as psw } from "bun"; // using inBuilt library of bun to hash and verify the password
 
@@ -77,13 +76,15 @@ export default class userServices {
     // if all good
     // generate a short code
     // return it in url
-    return ApiResponse.created("User registered successfully", {
+    return ApiResponse.success("User found", {
       id: userEmailResult.userId,
       email: userEmailResult.email
     });
   }
 
   static async getUser(acceessToken: string){
-    
+    // take auth code
+    // verify clientId and take client secret
+    // look for client secret matching with table storing auth code and client secret in memoryTable
   }
 }

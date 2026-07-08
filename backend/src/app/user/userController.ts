@@ -49,6 +49,9 @@ export default class userController {
       }
       const accessToken = authHeader.split(" ")[1];
       const result = await userServices.getUser(accessToken!);
-    } catch (error) {}
+      // return res.status(response.statusCode).json(response);
+    } catch (error) {
+      next(error)
+    }
   }
 }

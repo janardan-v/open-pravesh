@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node dist/index.js",
     "build": "tsc -p .",
-    "dev": "tsc-watch --onsuccess \"node dist/server.js\"",
+    "dev": "tsc-watch --onsuccess \"node server.js\"",
     "generate": "drizzle-kit generate",
     "migrate": "drizzle-kit migrate",
     "studio": "drizzle-kit studio"
@@ -16,6 +16,7 @@
     "@types/express": "^5.0.6",
     "@types/pg": "^8.20.0",
     "drizzle-kit": "^1.0.0-rc.4",
+    "tsc-watch": "^7.2.1",
     "tsx": "^4.23.0"
   },
   "peerDependencies": {

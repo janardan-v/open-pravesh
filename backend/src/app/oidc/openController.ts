@@ -1,5 +1,8 @@
 import type { Request, Response, NextFunction } from "express";
 import ApiResponse from "../../common/utils/apiResponse";
+import { authenticateUserSchema } from "./openModel";
+import ApiError from "../../common/utils/apiError";
+import openServices from "./openServices";
 
 export default class openController {
   public static serviceDiscovery(
@@ -14,8 +17,30 @@ export default class openController {
 
       token_endpoint: "http://localhost:3000/v1/token",
       userinfo_endpoint: "http://localhost:3000/v1/userinfo",
-      revocation_endpoint: "http://localhost:3000/v1/revoke",
       jwks_uri: "http://localhost:3000/v1/certs",
     });
+  }
+
+  public static async authenticateUser(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      const [clientId] = req.params.clientId!;
+
+      if (!clientId) {
+        throw ApiError.badRequest("ClientId is required");
+      }
+
+      const result = await openServices.authenticateUser({ clientId });
+
+      if(!result.data){
+        throw ApiError.internalServerError(result.message || "Somethig went wrong while redirecting")
+      }
+      res.redirect(result.data.redirectUrl)
+    } catch (error) {
+      next(error)
+    }
   }
 }
