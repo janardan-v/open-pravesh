@@ -6,6 +6,7 @@ const openRouter = Router();
 
 
 openRouter.get("/.well-known/openid-configuration", openController.serviceDiscovery )
+openRouter.post("/token-endpoint", openController.generateToken )
 
 
 export default openRouter

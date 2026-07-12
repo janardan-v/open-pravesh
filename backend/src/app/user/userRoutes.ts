@@ -6,4 +6,4 @@ import { verifyClient } from "../../common/middlewares/verifyClient"
 const userRouter = Router()
 
 userRouter.post("/register", userController.register)
-userRouter.post("/login/:clientId", verifyClient, userController.register, openController.authenticateUser)
+userRouter.post("/login/:clientId", verifyClient, userController.register, openController.authenticate)

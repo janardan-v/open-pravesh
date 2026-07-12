@@ -21,12 +21,16 @@ export default class openController {
     });
   }
 
-  public static async authenticateUser(
+  public static async authenticate(
     req: Request,
     res: Response,
     next: NextFunction,
   ) {
     try {
+      // get client id
+      // get short code
+      // check expirty of short code
+      // check in inMemoryTable => clientId
       const [clientId] = req.params.clientId!;
 
       if (!clientId) {
@@ -35,12 +39,32 @@ export default class openController {
 
       const result = await openServices.authenticateUser({ clientId });
 
-      if(!result.data){
-        throw ApiError.internalServerError(result.message || "Somethig went wrong while redirecting")
+      if (!result.data) {
+        throw ApiError.internalServerError(
+          result.message || "Somethig went wrong while redirecting",
+        );
       }
-      res.redirect(result.data.redirectUrl)
+      res.redirect(result.data.redirectUrl);
     } catch (error) {
-      next(error)
+      next(error);
+    }
+  }
+
+  public static async generateToken(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      // get client id
+      // get client secret
+      // get short code
+      // if any not exist, redirect back
+      
+      // call openServices
+      // give access and refresh tokens 
+    } catch (error) {
+      next(error);
     }
   }
 }

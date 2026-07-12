@@ -37,4 +37,15 @@ export default class openServices {
       redirectUrl: responseUrl.toString(),
     });
   }
+
+  static async tokenGenerationService() {
+    // get client id
+    // get client secret
+    // get short code
+    // look for client exits or not
+    // look for secret match with db or not
+    // check if short code is expired or not
+    // if expired  -> error and back
+    // not expired generate access and refresh Token
+  }
 }
