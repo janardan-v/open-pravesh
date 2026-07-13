@@ -1,4 +1,3 @@
-import type { authenticateUserData } from "./openModel";
 import crypto from "crypto";
 import inMemoryTable from "../../db/inMemory";
 import db from "../../db/";
@@ -6,46 +5,16 @@ import { clientsTable } from "../../db/schema";
 import { eq } from "drizzle-orm";
 import ApiError from "../../common/utils/apiError";
 import ApiResponse from "../../common/utils/apiResponse";
+import verifyClient from "../../common/utils/verifyClient"
 
 export default class openServices {
-  static async authenticateUser({ clientId }: authenticateUserData) {
-    const [clientResult] = await db
-      .select({
-        id: clientsTable.id,
-        clientSecret: clientsTable.clientSecret,
-        redirectUri: clientsTable.redirectUri,
-      })
-      .from(clientsTable)
-      .where(eq(clientsTable.id, clientId));
+  
+  
+  // static async generatePublicKey() {
+  //   const publicKeys = await getPublicJWK();
 
-    if (!clientResult) {
-      throw ApiError.badRequest("Client not found");
-    }
-    const { clientSecret, redirectUri } = clientResult;
-
-    const authenticationCode = crypto.randomBytes(32).toString("hex");
-
-    inMemoryTable[clientId] = {
-      clientSecret,
-      authenticationCode,
-    };
-
-    const responseUrl = new URL(redirectUri);
-    responseUrl.searchParams.set("code", authenticationCode);
-
-    return ApiResponse.success("User found", {
-      redirectUrl: responseUrl.toString(),
-    });
-  }
-
-  static async tokenGenerationService() {
-    // get client id
-    // get client secret
-    // get short code
-    // look for client exits or not
-    // look for secret match with db or not
-    // check if short code is expired or not
-    // if expired  -> error and back
-    // not expired generate access and refresh Token
-  }
+  //   return ApiResponse.created("Public keys created", {
+  //     keys: publicKeys,
+  //   });
+  // }
 }

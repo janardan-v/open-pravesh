@@ -1,7 +1,10 @@
 interface inMemoryTableInterface {
     [clientId: string]: {
         clientSecret: string;
-        authenticationCode: string;
+        authentication: {
+            code: string,
+            expiresAt: number
+        };
     };
 }
 

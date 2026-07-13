@@ -1,8 +1,9 @@
 import type { Request, Response, NextFunction } from "express";
 import ApiResponse from "../../common/utils/apiResponse";
-import { authenticateUserSchema } from "./openModel";
 import ApiError from "../../common/utils/apiError";
 import openServices from "./openServices";
+import { clientsTable } from "../../db/schema";
+import { getPublicJWKS } from "../../common/utils/pemTojwk";
 
 export default class openController {
   public static serviceDiscovery(
@@ -21,48 +22,15 @@ export default class openController {
     });
   }
 
-  public static async authenticate(
+  public static async publicKey(
     req: Request,
     res: Response,
     next: NextFunction,
   ) {
     try {
-      // get client id
-      // get short code
-      // check expirty of short code
-      // check in inMemoryTable => clientId
-      const [clientId] = req.params.clientId!;
+      const result = getPublicJWKS();
 
-      if (!clientId) {
-        throw ApiError.badRequest("ClientId is required");
-      }
-
-      const result = await openServices.authenticateUser({ clientId });
-
-      if (!result.data) {
-        throw ApiError.internalServerError(
-          result.message || "Somethig went wrong while redirecting",
-        );
-      }
-      res.redirect(result.data.redirectUrl);
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  public static async generateToken(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ) {
-    try {
-      // get client id
-      // get client secret
-      // get short code
-      // if any not exist, redirect back
-      
-      // call openServices
-      // give access and refresh tokens 
+      res.status(200).json(result);
     } catch (error) {
       next(error);
     }
