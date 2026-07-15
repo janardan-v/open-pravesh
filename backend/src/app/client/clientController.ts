@@ -1,7 +1,7 @@
-import { clientRegisterSchema, clientLoginSchema} from "./clientModel.ts";
-import ApiError from "../../common/utils/apiError.ts";
-import ApiResponse from "../../common/utils/apiResponse.ts";
-import clientServices from "./clientServices.ts";
+import { clientRegisterSchema, clientLoginSchema} from "./clientModel";
+import ApiError from "../../common/utils/apiError";
+import ApiResponse from "../../common/utils/apiResponse";
+import clientServices from "./clientServices";
 import { type Response, type Request, type NextFunction, response } from "express";
 
 export default class clientController {

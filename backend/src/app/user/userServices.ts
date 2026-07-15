@@ -1,10 +1,11 @@
-import type { RegisterData, LoginData } from "./userModel.ts";
-import { usersTable } from "../../db/schema.ts";
-import db from "../../db/index.ts";
+import type { RegisterData, LoginData } from "./userModel";
+import { usersTable } from "../../db/schema";
+import db from "../../db/index";
 import { eq } from "drizzle-orm";
-import ApiError from "../../common/utils/apiError.ts";
-import ApiResponse from "../../common/utils/apiResponse.ts";
-
+import ApiError from "../../common/utils/apiError";
+import ApiResponse from "../../common/utils/apiResponse";
+import { getPrivateKey} from "../../common/utils/pemTojwk";
+import { verifyAccessToken} from "../../common/utils/jwtUtils";
 import { password as psw } from "bun"; // using inBuilt library of bun to hash and verify the password
 
 export default class userServices {
@@ -82,9 +83,5 @@ export default class userServices {
     });
   }
 
-  static async getUser(acceessToken: string){
-    // take auth code
-    // verify clientId and take client secret
-    // look for client secret matching with table storing auth code and client secret in memoryTable
-  }
+  
 }

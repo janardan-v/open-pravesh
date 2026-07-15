@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
     // Environment setup & latest features
+    "outDir": "./dist",
+    "rootDir": ".",
     "lib": ["ESNext"],
     "target": "ESNext",
     "module": "Preserve",
@@ -11,9 +13,9 @@
 
     // Bundler mode
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
+    // "allowImportingTsExtensions": false,
     "verbatimModuleSyntax": true,
-    "noEmit": true,
+    "noEmit": false,
 
     // Best practices
     "strict": true,

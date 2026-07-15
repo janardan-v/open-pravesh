@@ -1,9 +1,10 @@
 import Router from "express"
 import userController from "./userController"
-import openController from "../oidc/openController"
 import { verifyClient } from "../../common/middlewares/verifyClient"
+import oauthController from "../oauth/oAuthController"
 
 const userRouter = Router()
 
 userRouter.post("/register", userController.register)
-userRouter.post("/login/:clientId", verifyClient, userController.register, openController.authenticate)
+userRouter.post("/login/:clientId/:shortCode", verifyClient, userController.login, oauthController.authenticate)
+userRouter.post("/userInfo", userController.getUserInfo)

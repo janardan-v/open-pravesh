@@ -1,8 +1,9 @@
-import ApiError from "../../common/utils/apiError.ts";
-import type { RegisterData, LoginData } from "./userModel.ts";
-import { registerSchema, loginSchema } from "./userModel.ts";
-import userServices from "./userServices.ts";
-import type { Request, Response, NextFunction } from "express";;
+import ApiError from "../../common/utils/apiError";
+import { verifyAccessToken } from "../../common/utils/jwtUtils";
+import { getPrivateKey } from "../../common/utils/pemTojwk";
+import { registerSchema, loginSchema } from "./userModel";
+import userServices from "./userServices";
+import type { Request, Response, NextFunction } from "express";
 
 export default class userController {
   static async register(req: Request, res: Response, next: NextFunction) {
@@ -41,17 +42,20 @@ export default class userController {
     }
   }
 
-  static async getUser(req: Request, res: Response, next: NextFunction) {
+  static async getUserInfo(req: Request, res: Response, next: NextFunction) {
     try {
       const authHeader = req.headers.authorization;
       if (!authHeader || !authHeader.startsWith("Bearer ")) {
         throw ApiError.unauthorized("Invalid token");
       }
       const accessToken = authHeader.split(" ")[1];
-      const result = await userServices.getUser(accessToken!);
-      // return res.status(response.statusCode).json(response);
+      if (!accessToken) {
+        throw ApiError.unauthorized("Token not found");
+      }
+      const response = verifyAccessToken(accessToken, getPrivateKey());
+      return res.status(response.statusCode).json(response.data);
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 }

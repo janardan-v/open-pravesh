@@ -73,9 +73,10 @@ export default class oAuthServices {
     };
 
     const responseUrl = new URL(redirectUri);
+  
     responseUrl.searchParams.set("code", authenticationCode);
 
-    return ApiResponse.success("User found", {
+    return ApiResponse.success("User authenticated", {
       redirectUrl: responseUrl.toString(),
     });
   }

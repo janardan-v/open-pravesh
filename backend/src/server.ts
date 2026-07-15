@@ -1,6 +1,6 @@
 import { createServer } from "node:http";
-import createServerApplication from "./src/app/app";
-import { initialiseJWKS } from "./src/common/utils/pemTojwk";
+import createServerApplication from "./app/app";
+import { initialiseJWKS } from "./common/utils/pemTojwk";
 
 const startServer = async () => {
   try {

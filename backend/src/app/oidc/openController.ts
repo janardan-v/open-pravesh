@@ -1,8 +1,4 @@
 import type { Request, Response, NextFunction } from "express";
-import ApiResponse from "../../common/utils/apiResponse";
-import ApiError from "../../common/utils/apiError";
-import openServices from "./openServices";
-import { clientsTable } from "../../db/schema";
 import { getPublicJWKS } from "../../common/utils/pemTojwk";
 
 export default class openController {

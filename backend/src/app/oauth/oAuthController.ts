@@ -1,6 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
 import ApiError from "../../common/utils/apiError";
-import { authenticateUserSchema } from "./oAuthModel";
 import oAuthServices from "./oAuthServices";
 
 export default class oauthController {
@@ -11,9 +10,8 @@ export default class oauthController {
   ) {
     try {
       // get client id
-      // get short code
-      // check expirty of short code
-      // check in inMemoryTable => clientId
+      // generate auth code
+      // return auth code
       const [clientId] = req.params.clientId!;
 
       if (!clientId) {
