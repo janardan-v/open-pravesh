@@ -13,19 +13,26 @@ export default class oauthController {
       // generate auth code
       // return auth code
       const [clientId] = req.params.clientId!;
+      const userId = res.locals.userId;
+      const userEmail = res.locals.userEmail;
 
-      if (!clientId) {
-        throw ApiError.badRequest("ClientId is required");
+
+      if (!clientId || !userId || !userEmail) {
+        throw ApiError.badRequest("All fields are required");
       }
 
-      const result = await oAuthServices.authenticateUser({ clientId });
+      const result = await oAuthServices.authenticateUser({ clientId, userId, userEmail });
 
       if (!result.data) {
         throw ApiError.internalServerError(
           result.message || "Somethig went wrong while redirecting",
         );
       }
-      res.redirect(result.data.redirectUrl);
+
+      const responseUrl = result.data.redirectUrl;
+      responseUrl.searchParams.set("code", result.data.shortCode);
+
+      return res.redirect(responseUrl.toString());
     } catch (error) {
       next(error);
     }
@@ -37,11 +44,10 @@ export default class oauthController {
     next: NextFunction,
   ) {
     try {
-      const { clientId, clientSecret, authCode, userId } = req.query as {
+      const { clientId, clientSecret, authCode } = req.params as {
         clientId: string;
         clientSecret: string;
         authCode: string;
-        userId: string;
       };
 
       // get client secret
@@ -52,9 +58,7 @@ export default class oauthController {
         !clientSecret ||
         !clientSecret.trim() ||
         !authCode ||
-        !authCode.trim() ||
-        !userId ||
-        !userId.trim()
+        !authCode.trim()
       ) {
         throw ApiError.badRequest("Invalid query parameters");
       }
@@ -65,7 +69,6 @@ export default class oauthController {
         clientId,
         clientSecret,
         authCode,
-        userId,
       });
       const accessToken = result.data?.accessToken;
       const refreshToken = result.data?.refreshToken;

@@ -5,6 +5,6 @@ import oauthController from "../oauth/oAuthController"
 
 const userRouter = Router()
 
-userRouter.post("/register", userController.register)
-userRouter.post("/login/:clientId/:shortCode", verifyClient, userController.login, oauthController.authenticate)
-userRouter.post("/userInfo", userController.getUserInfo)
+userRouter.post("/register", userController.register) // done
+userRouter.post("/login/:clientId/", verifyClient, userController.login, oauthController.authenticate) // done
+userRouter.get("/userInfo", userController.getUserInfo)

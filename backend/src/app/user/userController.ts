@@ -35,8 +35,14 @@ export default class userController {
       }
 
       const response = await userServices.login(data.data);
-
-      return res.status(response.statusCode).json(response);
+      if (!response.data) {
+        throw ApiError.internalServerError(response.message);
+      }
+      res.locals.userId = response.data.id;
+      res.locals.userEmail = response.data.email;
+      if (data.success) {
+        next();
+      }
     } catch (error) {
       next(error);
     }

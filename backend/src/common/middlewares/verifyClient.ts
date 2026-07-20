@@ -23,6 +23,7 @@ export const verifyClient = async (
   if (!clientIdSearchResult) {
     throw ApiError.notFound("No client exists with this client id");
   }
+  res.locals.clientId = clientIdSearchResult.id;
 
   next();
 };

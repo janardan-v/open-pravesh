@@ -5,7 +5,7 @@ const openRouter = Router();
 
 
 openRouter.get("/.well-known/openid-configuration", openController.serviceDiscovery )
-openRouter.post("/v1/certs", openController.publicKey )
+openRouter.get("/v1/certs", openController.publicKey )
 
 
 export default openRouter

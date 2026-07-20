@@ -14,7 +14,6 @@ interface tokenGenerationPayload {
   clientId: string;
   clientSecret: string;
   authCode: string;
-  userId: string;
 }
 
 export default class oAuthServices {
@@ -22,32 +21,29 @@ export default class oAuthServices {
     clientId,
     clientSecret,
     authCode,
-    userId,
   }: tokenGenerationPayload) {
     // look for client exits or not
     const { redirectUri } = await verifyClient(clientId);
 
     // const client = Object.keys(inMemoryTable).find((key) => key == clientId);
-    const client = inMemoryTable[clientId];
+    const clientWithAuthCode = inMemoryTable[authCode];
 
-    if (!client) {
-      throw ApiError.notFound("No user from this client exist");
+    if (!clientWithAuthCode) {
+      throw ApiError.notFound("No user with this authentication code exist");
     }
     // look for secret match with db or not
-    if (client.clientSecret !== clientSecret) {
+    if (clientWithAuthCode.clientSecret !== clientSecret) {
       throw ApiError.unauthorized("Client secret is not valid");
     }
-    if (client.authentication.code != authCode) {
-      throw ApiError.forbidden("Invalid code");
-    }
     // check if short code is expired or not
-    if (Date.now() > client.authentication.expiresAt) {
+    if (Date.now() > clientWithAuthCode.expiresAt) {
       throw ApiError.unauthorized("Authentication code is expired");
     }
 
     // not expired generate access and refresh Token
     const payload = {
-      userId,
+      userId: clientWithAuthCode.userId,
+      userEmail: clientWithAuthCode.userEmail
     };
 
     const accessToken = generateAccessToken(payload, getPrivateKey());
@@ -59,25 +55,26 @@ export default class oAuthServices {
     });
   }
 
-  static async authenticateUser({ clientId }: authenticateUserData) {
+  static async authenticateUser({ clientId,userEmail, userId }: authenticateUserData) {
     const { clientSecret, redirectUri } = await verifyClient(clientId);
 
     const authenticationCode = crypto.randomBytes(32).toString("hex");
 
-    inMemoryTable[clientId] = {
+    inMemoryTable[authenticationCode] = {
+      expiresAt: Date.now() + 1000 * 60,
+      clientId,
       clientSecret,
-      authentication: {
-        code: authenticationCode,
-        expiresAt: Date.now() + 1000 * 60,
-      },
+      userId: userId,
+      userEmail: userEmail
     };
+    
 
     const responseUrl = new URL(redirectUri);
   
-    responseUrl.searchParams.set("code", authenticationCode);
-
+  
     return ApiResponse.success("User authenticated", {
-      redirectUrl: responseUrl.toString(),
+      redirectUrl: responseUrl,
+      shortCode: authenticationCode
     });
   }
 }
