@@ -12,7 +12,7 @@ export const generateAccessToken = (payload: object, privateKey: Buffer) => {
 
 export const verifyAccessToken = (token: string, privateKey: Buffer) => {
   try {
-    const accessToken = jwt.sign(token, privateKey);
+    const accessToken = jwt.verify(token, privateKey);
     return ApiResponse.success("Token verified", accessToken);
   } catch (error) {
     throw ApiError.unauthorized("Invalid token");

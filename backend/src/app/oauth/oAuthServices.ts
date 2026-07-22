@@ -23,6 +23,7 @@ export default class oAuthServices {
     authCode,
   }: tokenGenerationPayload) {
     // look for client exits or not
+    
     const { redirectUri } = await verifyClient(clientId);
 
     // const client = Object.keys(inMemoryTable).find((key) => key == clientId);
@@ -67,10 +68,9 @@ export default class oAuthServices {
       userId: userId,
       userEmail: userEmail
     };
-    
+    console.log(inMemoryTable)
 
     const responseUrl = new URL(redirectUri);
-  
   
     return ApiResponse.success("User authenticated", {
       redirectUrl: responseUrl,

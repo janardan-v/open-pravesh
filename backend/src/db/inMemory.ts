@@ -12,4 +12,5 @@ interface inMemoryTableInterface {
 
 const inMemoryTable: inMemoryTableInterface = {};
 
+console.log(inMemoryTable);
 export default inMemoryTable;

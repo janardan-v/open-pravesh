@@ -1,9 +1,9 @@
-import type { clientRegisterData, clientLoginData } from "./clientModel.ts";
-import { clientsTable } from "../../db/schema.ts";
-import db from "../../db/index.ts";
+import type { clientRegisterData, clientLoginData } from "./clientModel";
+import { clientsTable } from "../../db/schema";
+import db from "../../db/index";
 import { eq } from "drizzle-orm";
-import ApiError from "../../common/utils/apiError.ts";
-import ApiResponse from "../../common/utils/apiResponse.ts";
+import ApiError from "../../common/utils/apiError";
+import ApiResponse from "../../common/utils/apiResponse";
 import crypto from "crypto";
 
 import { password as psw } from "bun"; // using inBuilt library of bun to hash and verify the password
@@ -85,10 +85,10 @@ export default class clientServices {
     // generate a short code
     // return it in url
     return ApiResponse.success("Client found successfully", {
-      clientId: clientsTable.id,
-      clientSecrert: clientsTable.clientSecret,
-      redirectUri: clientsTable.redirectUri,
-      hostedUri: clientsTable.hostedUri,
+      clientId: clientEmailResult.clientId,
+      clientSecrert: clientEmailResult.clientSecrert,
+      redirectUri: clientEmailResult.redirectUri,
+      hostedUri: clientEmailResult.hostedUri,
     });
   }
 

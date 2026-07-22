@@ -9,8 +9,9 @@ export const verifyClient = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const clientId = req.params.client_id;
-
+  const clientId = req.params.clientId;
+  console.log("Request pass 1");
+  
   if (!clientId || typeof clientId !== "string" || clientId.trim() === "") {
     throw ApiError.badRequest("Client ID is required");
   }
@@ -24,6 +25,7 @@ export const verifyClient = async (
     throw ApiError.notFound("No client exists with this client id");
   }
   res.locals.clientId = clientIdSearchResult.id;
-
+ console.log("Request pass 2");
+  
   next();
 };

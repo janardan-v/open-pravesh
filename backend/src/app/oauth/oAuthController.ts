@@ -12,16 +12,20 @@ export default class oauthController {
       // get client id
       // generate auth code
       // return auth code
-      const [clientId] = req.params.clientId!;
+      const clientId = req.params.clientId;
       const userId = res.locals.userId;
       const userEmail = res.locals.userEmail;
+      console.log("Request pass 5");
 
-
-      if (!clientId || !userId || !userEmail) {
+      if (!clientId || typeof clientId !== "string" || !userId || !userEmail) {
         throw ApiError.badRequest("All fields are required");
       }
 
-      const result = await oAuthServices.authenticateUser({ clientId, userId, userEmail });
+      const result = await oAuthServices.authenticateUser({
+        clientId,
+        userId,
+        userEmail,
+      });
 
       if (!result.data) {
         throw ApiError.internalServerError(
@@ -31,8 +35,11 @@ export default class oauthController {
 
       const responseUrl = result.data.redirectUrl;
       responseUrl.searchParams.set("code", result.data.shortCode);
-
-      return res.redirect(responseUrl.toString());
+     
+      // return res.redirect(responseUrl.toString());
+      return res.status(302).json({
+        redirectTo: responseUrl.toString(),
+      });
     } catch (error) {
       next(error);
     }
