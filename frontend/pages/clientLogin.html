@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Client Login</title>
+  </head>
+  <body>
+    <header>
+      <h1>Client Login</h1>
+      <form action="submit" id="clientLoginForm">
+        <label for="email">Enter your email</label>
+        <input type="email" id="email" required />
+        <label for="password">Enter your password</label>
+        <input type="text" id="password" required />
+        <button type="submit">Login</button>
+      </form>
+
+      <!-- <div id="loginErrorScreen" style="visibility: hidden"> -->
+      <div id="loginErrorScreen">
+        <div>Login Failed</div>
+        <div>Either email or password is incorrect</div>
+      </div>
+      <div id="noCredentials">
+        <div>Login Failed</div>
+        <div>All fields are required</div>
+      </div>
+      <!-- <div id="clientNotFound" style="visibility: hidden"> -->
+      <div id="clientNotFound">
+        <div>No client exists with this credentials</div>
+        <a href="">Try Registering Here first</a>
+      </div>
+    </header>
+  </body>
+  <script src="../scripts/clientLoginScript.ts"></script>
+</html>
