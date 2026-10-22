@@ -4,8 +4,8 @@ import openController from "./openController"
 const openRouter = Router();
 
 
-openRouter.get("/.well-known/openid-configuration", openController.serviceDiscovery ) // sorted
-openRouter.get("/v1/certs", openController.publicKey )  // sorted
+openRouter.get("/.well-known/openid-configuration", openController.serviceDiscovery )
+openRouter.get("/v1/certs", openController.publicKey )  
  
 
 export default openRouter
