@@ -27,7 +27,6 @@ export default class userController {
   static async login(req: Request, res: Response, next: NextFunction) {
     try {
       const data = loginSchema.safeParse(req.body);
-      console.log("Request pass 3");
 
       if (!data.success) {
         throw ApiError.badRequest(
@@ -41,7 +40,6 @@ export default class userController {
       }
       res.locals.userId = response.data.id;
       res.locals.userEmail = response.data.email;
-      console.log("Request pass 4");
   
       if (data.success) {
         next();

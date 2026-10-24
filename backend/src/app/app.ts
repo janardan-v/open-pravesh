@@ -5,9 +5,12 @@ import openRouter from "./oidc/openRoute";
 import userRouter from "./user/userRoutes";
 import oAuthRouter from "./oauth/oAuthRoutes";
 import clientRouter from "./client/clientRoutes";
+import cors from "cors";
 
 function createServerApplication(): Express {
   const app = express();
+  app.use(cors())
+
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(express.static("public"));  

@@ -8,7 +8,7 @@ export default class clientController {
   static async register(req: Request, res: Response, next: NextFunction) {
     try {
       const data = clientRegisterSchema.safeParse(req.body);
-  
+      
       if (!data.success) {
         throw ApiError.badRequest(
           data.error.issues[0]?.message || "All data fields are required",
@@ -17,11 +17,11 @@ export default class clientController {
   
       const result = await clientServices.register(data.data);
   
-      if (!result) {
+      if (!result || !result.success || !result.data) {
         return ApiError.internalServerError("Error while creating client");
       }
   
-      return res.status(result.statusCode).json(result.data)   
+      return res.status(result.statusCode).json(result)   
     } catch (error) {
       next(error)
     }

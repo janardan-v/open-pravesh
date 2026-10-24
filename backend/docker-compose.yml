@@ -11,7 +11,7 @@ services:
     environment:
       POSTGRES_USER: janardan
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: openpravesh
+      POSTGRES_DB: open-pravesh
 
     volumes:
       - open_pravesh_postgres_data:/var/lib/postgresql/data

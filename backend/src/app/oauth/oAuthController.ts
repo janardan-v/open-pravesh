@@ -15,7 +15,7 @@ export default class oauthController {
       const clientId = req.params.clientId;
       const userId = res.locals.userId;
       const userEmail = res.locals.userEmail;
-      console.log("Request pass 5");
+      console.log(" 5");
 
       if (!clientId || typeof clientId !== "string" || !userId || !userEmail) {
         throw ApiError.badRequest("All fields are required");
@@ -37,7 +37,7 @@ export default class oauthController {
       responseUrl.searchParams.set("code", result.data.shortCode);
      
       // return res.redirect(responseUrl.toString());
-      return res.status(302).json({
+      return res.status(200).json({
         redirectTo: responseUrl.toString(),
       });
     } catch (error) {
