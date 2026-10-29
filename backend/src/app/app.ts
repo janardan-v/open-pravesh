@@ -9,7 +9,13 @@ import cors from "cors";
 
 function createServerApplication(): Express {
   const app = express();
-  app.use(cors())
+  app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "https://open-pravesh.vercel.app"
+  ],
+  credentials: true
+}));
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
