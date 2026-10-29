@@ -1,0 +1,75 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="op-chrome-portal" x1="8" y1="8" x2="56" y2="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="25%" stop-color="#E2E8F0" />
+      <stop offset="55%" stop-color="#94A3B8" />
+      <stop offset="85%" stop-color="#334155" />
+      <stop offset="100%" stop-color="#0F172A" />
+    </linearGradient>
+    <radialGradient id="op-liquid-orb" cx="35%" cy="30%" r="70%" fx="35%" fy="30%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="40%" stop-color="#CBD5E1" />
+      <stop offset="75%" stop-color="#64748B" />
+      <stop offset="100%" stop-color="#0F172A" />
+    </radialGradient>
+    <linearGradient id="op-rim-sheen" x1="32" y1="4" x2="32" y2="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.95" />
+      <stop offset="50%" stop-color="#94A3B8" stop-opacity="0.2" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.4" />
+    </linearGradient>
+  </defs>
+
+  <!-- Ambient Obsidian Canvas -->
+  <rect width="64" height="64" rx="14" fill="#08090B" />
+  <rect x="0.5" y="0.5" width="63" height="63" rx="13.5" stroke="rgba(255, 255, 255, 0.12)" />
+
+  <!-- Ambient Glow -->
+  <circle cx="32" cy="32" r="26" fill="rgba(255, 255, 255, 0.04)" />
+
+  <!-- Outer Hexagonal Portal Gateway -->
+  <path
+    d="M32 7L54 19.7V45.1L32 57.8L10 45.1V19.7L32 7Z"
+    fill="#0F1117"
+    stroke="url(#op-chrome-portal)"
+    stroke-width="3.5"
+    stroke-linejoin="round"
+  />
+
+  <!-- 3D Beveled Chiseled Facets -->
+  <path
+    d="M32 7V20M54 19.7L42.5 26.5M54 45.1L42.5 38.3M32 57.8V44.5M10 45.1L21.5 38.3M10 19.7L21.5 26.5"
+    stroke="rgba(255, 255, 255, 0.28)"
+    stroke-width="2"
+    stroke-linecap="round"
+  />
+
+  <!-- Inner Gateway Portal Arch -->
+  <path
+    d="M25 44V32C25 28.134 28.134 25 32 25C35.866 25 39 28.134 39 32V44H25Z"
+    fill="rgba(8, 9, 11, 0.95)"
+    stroke="url(#op-rim-sheen)"
+    stroke-width="2.2"
+  />
+
+  <!-- Floating Liquid Mercury Seed Core -->
+  <circle
+    cx="32"
+    cy="33"
+    r="6.5"
+    fill="url(#op-liquid-orb)"
+    stroke="#FFFFFF"
+    stroke-width="1.6"
+  />
+
+  <!-- Specular Glint Reflection -->
+  <ellipse
+    cx="29.8"
+    cy="30.2"
+    rx="2"
+    ry="1.2"
+    fill="#FFFFFF"
+    opacity="0.95"
+    transform="rotate(-25 29.8 30.2)"
+  />
+</svg>

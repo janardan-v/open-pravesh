@@ -1,0 +1,369 @@
+/* ==========================================================================
+   OpenPravesh — Shared Liquid Mercury Theme Tokens & Utilities
+   Luxury monochrome obsidian canvas, liquid chrome accents, and glass cards.
+   ========================================================================== */
+
+:root {
+  /* Canvas & Obsidian Surfaces */
+  --merc-bg: #08090B;
+  --merc-bg-subtle: #0D0F14;
+  --merc-surface: #101217;
+  --merc-surface-glass: rgba(16, 18, 23, 0.75);
+  --merc-surface-elevated: #161920;
+  --merc-surface-active: #1D212A;
+
+  /* Metallic Silver & Chrome */
+  --merc-chrome: #FFFFFF;
+  --merc-silver: #E2E8F0;
+  --merc-silver-muted: #94A3B8;
+  --merc-steel: #64748B;
+  --merc-steel-dark: #334155;
+
+  /* Typography Colors */
+  --merc-text-primary: #FFFFFF;
+  --merc-text-secondary: #94A3B8;
+  --merc-text-muted: #64748B;
+  --merc-text-faint: #475569;
+
+  /* Borders & Hairlines */
+  --merc-border: rgba(255, 255, 255, 0.12);
+  --merc-border-subtle: rgba(255, 255, 255, 0.07);
+  --merc-border-active: rgba(255, 255, 255, 0.35);
+  --merc-border-glow: rgba(255, 255, 255, 0.2);
+
+  /* Functional Telemetry Signals */
+  --merc-signal-cyan: #38BDF8;
+  --merc-signal-green: #10B981;
+  --merc-signal-amber: #F59E0B;
+  --merc-signal-red: #EF4444;
+
+  /* Code & Syntax */
+  --merc-code-bg: #0C0D11;
+  --merc-code-text: #E2E8F0;
+  --merc-code-kw: #F472B6;
+  --merc-code-str: #34D399;
+  --merc-code-key: #38BDF8;
+  --merc-code-num: #FBBF24;
+  --merc-code-cmt: #64748B;
+
+  /* Elevation Shadows & Caustics */
+  --merc-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.5);
+  --merc-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.65);
+  --merc-shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.8);
+  --merc-shadow-glow: 0 0 32px rgba(255, 255, 255, 0.08);
+
+  /* Fonts */
+  --merc-font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --merc-font-mono: 'JetBrains Mono', 'Fira Code', Menlo, Monaco, Consolas, monospace;
+
+  /* Layout */
+  --merc-container-max: 1240px;
+  --merc-radius-sm: 6px;
+  --merc-radius-md: 10px;
+  --merc-radius-lg: 16px;
+}
+
+/* ==========================================================================
+   Shared Reusable App Shell & Glass Elements
+   ========================================================================== */
+
+.merc-page-shell {
+  min-height: 100vh;
+  background-color: var(--merc-bg);
+  color: var(--merc-text-primary);
+  font-family: var(--merc-font-sans);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-x: clip;
+}
+
+/* Ambient liquid light glow at page top */
+.merc-page-shell::before {
+  content: '';
+  position: fixed;
+  top: -150px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.04) 0%, rgba(56, 189, 248, 0.015) 40%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Standard Top Navigation Bar */
+.merc-nav-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(8, 9, 11, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--merc-border);
+  height: 64px;
+}
+
+.merc-nav-inner {
+  max-width: var(--merc-container-max);
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.merc-brand-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--merc-text-primary);
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+}
+
+.merc-brand-link:hover {
+  color: #FFFFFF;
+}
+
+.merc-brand-icon {
+  display: none;
+}
+
+.merc-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.merc-nav-link {
+  color: var(--merc-silver);
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 500;
+  transition: all 0.18s ease;
+  padding: 6px 12px;
+  border-radius: var(--merc-radius-sm);
+}
+
+.merc-nav-link:hover,
+.merc-nav-link.active {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Reusable High-Contrast Buttons */
+.merc-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(180deg, #FFFFFF 0%, #E2E8F0 100%);
+  color: #08090B !important;
+  font-weight: 700;
+  font-size: 0.90rem;
+  padding: 10px 18px;
+  border-radius: var(--merc-radius-sm);
+  text-decoration: none;
+  border: 1px solid #FFFFFF;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4), 0 0 16px rgba(255, 255, 255, 0.2), inset 0 1px 0 rgba(255, 255, 255, 1);
+  cursor: pointer;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+
+.merc-btn-primary:hover:not(:disabled) {
+  background: #FFFFFF;
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.35);
+  transform: translateY(-1px);
+}
+
+.merc-btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.merc-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.09);
+  color: #FFFFFF !important;
+  font-weight: 600;
+  font-size: 0.90rem;
+  padding: 10px 18px;
+  border-radius: var(--merc-radius-sm);
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+
+.merc-btn-secondary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.18);
+  color: #FFFFFF !important;
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45), 0 0 12px rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 640px) {
+  .merc-nav-inner {
+    padding: 0 16px;
+  }
+  .merc-nav-links {
+    gap: 8px;
+  }
+  .merc-nav-link {
+    padding: 5px 8px;
+    font-size: 0.80rem;
+  }
+  .merc-btn-primary,
+  .merc-btn-secondary {
+    padding: 8px 12px;
+    font-size: 0.82rem;
+  }
+}
+
+.merc-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: transparent;
+  color: var(--merc-silver-muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: var(--merc-radius-sm);
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.18s ease, background 0.18s ease;
+}
+
+.merc-btn-ghost:hover {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Glass Card */
+.merc-glass-card {
+  background: var(--merc-surface-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--merc-border);
+  border-radius: var(--merc-radius-md);
+  box-shadow: var(--merc-shadow-md);
+  position: relative;
+  z-index: 1;
+}
+
+/* Inputs & Form Elements */
+.merc-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.merc-label {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--merc-text-secondary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.merc-input {
+  width: 100%;
+  padding: 11px 14px;
+  background: #0B0D11;
+  border: 1px solid var(--merc-border);
+  border-radius: var(--merc-radius-sm);
+  color: var(--merc-text-primary);
+  font-family: inherit;
+  font-size: 0.92rem;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.merc-input:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.45);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
+}
+
+.merc-input::placeholder {
+  color: var(--merc-text-faint);
+}
+
+.merc-input[aria-invalid="true"] {
+  border-color: var(--merc-signal-red);
+}
+
+.merc-error-text {
+  font-size: 0.78rem;
+  color: var(--merc-signal-red);
+  margin-top: 2px;
+}
+
+.merc-alert-error {
+  padding: 10px 14px;
+  background: rgba(239, 68, 68, 0.10);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  border-radius: var(--merc-radius-sm);
+  color: #FCA5A5;
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.merc-alert-success {
+  padding: 10px 14px;
+  background: rgba(16, 185, 129, 0.10);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  border-radius: var(--merc-radius-sm);
+  color: #6EE7B7;
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+/* Badges */
+.merc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.merc-badge-green {
+  background: rgba(16, 185, 129, 0.14);
+  color: #34D399;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+}
+
+.merc-badge-cyan {
+  background: rgba(56, 189, 248, 0.14);
+  color: #38BDF8;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+.merc-badge-amber {
+  background: rgba(245, 158, 11, 0.14);
+  color: #FBBF24;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}

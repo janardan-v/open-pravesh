@@ -10,7 +10,10 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DeveloperRouteImport } from './routes/developer'
+import { Route as DocsRouteImport } from './routes/docs'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as ClientLoginRouteImport } from './routes/client/login'
 import { Route as ClientRegisterRouteImport } from './routes/client/register'
 import { Route as LoginClientIdRouteImport } from './routes/login.$clientId'
 
@@ -19,9 +22,24 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DeveloperRoute = DeveloperRouteImport.update({
+  id: '/developer',
+  path: '/developer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocsRoute = DocsRouteImport.update({
+  id: '/docs',
+  path: '/docs',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientLoginRoute = ClientLoginRouteImport.update({
+  id: '/client/login',
+  path: '/client/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ClientRegisterRoute = ClientRegisterRouteImport.update({
@@ -37,34 +55,68 @@ const LoginClientIdRoute = LoginClientIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/developer': typeof DeveloperRoute
+  '/docs': typeof DocsRoute
   '/register': typeof RegisterRoute
+  '/client/login': typeof ClientLoginRoute
   '/client/register': typeof ClientRegisterRoute
   '/login/$clientId': typeof LoginClientIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/developer': typeof DeveloperRoute
+  '/docs': typeof DocsRoute
   '/register': typeof RegisterRoute
+  '/client/login': typeof ClientLoginRoute
   '/client/register': typeof ClientRegisterRoute
   '/login/$clientId': typeof LoginClientIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/developer': typeof DeveloperRoute
+  '/docs': typeof DocsRoute
   '/register': typeof RegisterRoute
+  '/client/login': typeof ClientLoginRoute
   '/client/register': typeof ClientRegisterRoute
   '/login/$clientId': typeof LoginClientIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/register' | '/client/register' | '/login/$clientId'
+  fullPaths:
+    | '/'
+    | '/developer'
+    | '/docs'
+    | '/register'
+    | '/client/login'
+    | '/client/register'
+    | '/login/$clientId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/register' | '/client/register' | '/login/$clientId'
-  id: '__root__' | '/' | '/register' | '/client/register' | '/login/$clientId'
+  to:
+    | '/'
+    | '/developer'
+    | '/docs'
+    | '/register'
+    | '/client/login'
+    | '/client/register'
+    | '/login/$clientId'
+  id:
+    | '__root__'
+    | '/'
+    | '/developer'
+    | '/docs'
+    | '/register'
+    | '/client/login'
+    | '/client/register'
+    | '/login/$clientId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DeveloperRoute: typeof DeveloperRoute
+  DocsRoute: typeof DocsRoute
   RegisterRoute: typeof RegisterRoute
+  ClientLoginRoute: typeof ClientLoginRoute
   ClientRegisterRoute: typeof ClientRegisterRoute
   LoginClientIdRoute: typeof LoginClientIdRoute
 }
@@ -78,11 +130,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/developer': {
+      id: '/developer'
+      path: '/developer'
+      fullPath: '/developer'
+      preLoaderRoute: typeof DeveloperRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs': {
+      id: '/docs'
+      path: '/docs'
+      fullPath: '/docs'
+      preLoaderRoute: typeof DocsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/register': {
       id: '/register'
       path: '/register'
       fullPath: '/register'
       preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/client/login': {
+      id: '/client/login'
+      path: '/client/login'
+      fullPath: '/client/login'
+      preLoaderRoute: typeof ClientLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/client/register': {
@@ -104,7 +177,10 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DeveloperRoute: DeveloperRoute,
+  DocsRoute: DocsRoute,
   RegisterRoute: RegisterRoute,
+  ClientLoginRoute: ClientLoginRoute,
   ClientRegisterRoute: ClientRegisterRoute,
   LoginClientIdRoute: LoginClientIdRoute,
 }

@@ -1,0 +1,283 @@
+/* ==========================================================================
+   OpenPravesh — Developer Dashboard Styles
+   ========================================================================== */
+
+.merc-dev-container {
+  max-width: var(--merc-container-max);
+  margin: 0 auto;
+  padding: 36px 24px 80px;
+  width: 100%;
+}
+
+.merc-dev-header {
+  margin-bottom: 32px;
+}
+
+.merc-dev-eyebrow {
+  font-family: var(--merc-font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  color: var(--merc-signal-cyan);
+  text-transform: uppercase;
+  margin: 0 0 8px;
+}
+
+.merc-dev-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.merc-dev-title {
+  font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--merc-text-primary);
+  margin: 0;
+}
+
+.merc-dev-subtitle {
+  color: var(--merc-text-secondary);
+  font-size: 0.96rem;
+  margin: 8px 0 0;
+  max-width: 680px;
+}
+
+/* Stats Row */
+.merc-dev-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.merc-dev-stat-card {
+  padding: 20px;
+  background: var(--merc-surface-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--merc-border);
+  border-radius: var(--merc-radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.merc-dev-stat-label {
+  font-size: 0.78rem;
+  color: var(--merc-text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+.merc-dev-stat-value {
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--merc-text-primary);
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.merc-dev-stat-meta {
+  font-size: 0.78rem;
+  color: var(--merc-silver-muted);
+  font-family: var(--merc-font-mono);
+}
+
+/* Main Dashboard Cards */
+.merc-dev-card {
+  padding: 28px;
+  margin-bottom: 24px;
+}
+
+.merc-dev-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--merc-border-subtle);
+  margin-bottom: 24px;
+}
+
+.merc-dev-card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--merc-text-primary);
+  margin: 0 0 4px;
+}
+
+.merc-dev-card-desc {
+  font-size: 0.88rem;
+  color: var(--merc-text-secondary);
+  margin: 0;
+}
+
+/* Credential Rows */
+.merc-dev-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.merc-dev-field-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.merc-dev-field-label {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--merc-text-secondary);
+}
+
+.merc-dev-input-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.merc-dev-code-val {
+  flex: 1;
+  padding: 10px 14px;
+  background: var(--merc-code-bg);
+  border: 1px solid var(--merc-border);
+  border-radius: var(--merc-radius-sm);
+  color: var(--merc-code-text);
+  font-family: var(--merc-font-mono);
+  font-size: 0.86rem;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.merc-copy-btn {
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--merc-border);
+  border-radius: var(--merc-radius-sm);
+  color: var(--merc-silver);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.18s ease;
+  flex-shrink: 0;
+}
+
+.merc-copy-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  border-color: var(--merc-border-active);
+}
+
+/* Endpoints Grid */
+.merc-endpoints-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+}
+
+.merc-endpoints-table th {
+  text-align: left;
+  padding: 12px 14px;
+  color: var(--merc-text-muted);
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--merc-border-subtle);
+}
+
+.merc-endpoints-table td {
+  padding: 14px;
+  border-bottom: 1px solid var(--merc-border-subtle);
+  color: var(--merc-text-secondary);
+}
+
+.merc-method-tag {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-family: var(--merc-font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.merc-method-get {
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--merc-signal-cyan);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.merc-method-post {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--merc-signal-green);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+/* Code Snippet Box */
+.merc-dev-code-box {
+  background: var(--merc-code-bg);
+  border: 1px solid var(--merc-border);
+  border-radius: var(--merc-radius-sm);
+  padding: 16px;
+  overflow-x: auto;
+  position: relative;
+}
+
+.merc-dev-code-box pre {
+  margin: 0;
+  font-family: var(--merc-font-mono);
+  font-size: 0.84rem;
+  color: var(--merc-code-text);
+  line-height: 1.5;
+}
+
+/* Empty State */
+.merc-dev-empty {
+  text-align: center;
+  padding: 64px 24px;
+  max-width: 540px;
+  margin: 40px auto;
+}
+
+.merc-dev-empty-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--merc-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  color: var(--merc-silver-muted);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .merc-dev-container {
+    padding: 24px 16px 60px;
+  }
+
+  .merc-dev-card {
+    padding: 20px 16px;
+  }
+
+  .merc-dev-input-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .merc-endpoints-table th:nth-child(3),
+  .merc-endpoints-table td:nth-child(3) {
+    display: none;
+  }
+}

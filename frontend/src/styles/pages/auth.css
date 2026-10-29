@@ -1,0 +1,194 @@
+/* ==========================================================================
+   OpenPravesh — Authentication & Consent Pages
+   Shared styling for Client Auth, User Auth, and OIDC Authorization screens.
+   ========================================================================== */
+
+.merc-auth-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 20px 80px;
+  position: relative;
+  z-index: 1;
+}
+
+.merc-auth-card {
+  width: 100%;
+  max-width: 480px;
+  padding: 36px 32px;
+  margin: 0 auto;
+}
+
+.merc-auth-card-wide {
+  max-width: 580px;
+}
+
+.merc-auth-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.merc-auth-icon-wrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #FFFFFF 0%, #94A3B8 50%, #1E293B 100%);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  color: #08090B;
+}
+
+.merc-auth-eyebrow {
+  font-family: var(--merc-font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  color: var(--merc-signal-cyan);
+  text-transform: uppercase;
+  margin: 0 0 6px;
+}
+
+.merc-auth-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--merc-text-primary);
+  letter-spacing: -0.025em;
+  margin: 0 0 8px;
+}
+
+.merc-auth-subtitle {
+  color: var(--merc-text-secondary);
+  font-size: 0.90rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.merc-auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.merc-auth-footer {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--merc-border-subtle);
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--merc-text-muted);
+}
+
+.merc-auth-footer a {
+  color: var(--merc-silver);
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+
+.merc-auth-footer a:hover {
+  color: #FFFFFF;
+  text-decoration: underline;
+}
+
+/* Success Card */
+.merc-success-box {
+  background: rgba(16, 185, 129, 0.06);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: var(--merc-radius-sm);
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.merc-cred-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.merc-cred-label {
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--merc-text-muted);
+}
+
+.merc-cred-val-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.merc-cred-code {
+  flex: 1;
+  background: var(--merc-code-bg);
+  border: 1px solid var(--merc-border);
+  border-radius: var(--merc-radius-sm);
+  padding: 9px 12px;
+  font-family: var(--merc-font-mono);
+  font-size: 0.84rem;
+  color: var(--merc-signal-green);
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+/* Consent Box */
+.merc-consent-client-card {
+  background: var(--merc-surface-elevated);
+  border: 1px solid var(--merc-border);
+  border-radius: var(--merc-radius-sm);
+  padding: 16px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.merc-client-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--merc-radius-sm);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--merc-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #FFFFFF;
+  flex-shrink: 0;
+}
+
+.merc-scope-list {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.merc-scope-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: var(--merc-text-secondary);
+  background: rgba(255, 255, 255, 0.02);
+  padding: 8px 12px;
+  border-radius: var(--merc-radius-sm);
+  border: 1px solid var(--merc-border-subtle);
+}
+
+@media (max-width: 640px) {
+  .merc-auth-wrap {
+    padding: 24px 16px 60px;
+  }
+
+  .merc-auth-card {
+    padding: 24px 18px;
+  }
+}

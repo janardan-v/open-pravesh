@@ -45,7 +45,7 @@ export default class clientController {
         return ApiError.internalServerError("Error while finding client");
       }
   
-      return res.status(result.statusCode).json(result.data)   
+      return res.status(result.statusCode).json(result)   
     } catch (error) {
       next(error)
     }

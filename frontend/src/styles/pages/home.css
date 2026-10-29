@@ -1,0 +1,2601 @@
+/* ==========================================================================
+   OpenPravesh — Liquid Mercury Design System
+   Luxury high-contrast monochrome aesthetic with fluid metallic chrome caustics.
+   ========================================================================== */
+
+:root {
+  /* Canvas & Obsidian Surfaces */
+  --merc-bg: #08090B;
+  --merc-bg-subtle: #0D0F14;
+  --merc-surface: #101217;
+  --merc-surface-glass: rgba(16, 18, 23, 0.72);
+  --merc-surface-elevated: #161920;
+  --merc-surface-active: #1D212A;
+
+  /* Metallic Silver & Chrome */
+  --merc-chrome: #FFFFFF;
+  --merc-silver: #E2E8F0;
+  --merc-silver-muted: #94A3B8;
+  --merc-steel: #64748B;
+  --merc-steel-dark: #334155;
+
+  /* Typography Colors */
+  --merc-text-primary: #FFFFFF;
+  --merc-text-secondary: #94A3B8;
+  --merc-text-muted: #64748B;
+  --merc-text-faint: #475569;
+
+  /* Borders & Hairlines */
+  --merc-border: rgba(255, 255, 255, 0.12);
+  --merc-border-subtle: rgba(255, 255, 255, 0.07);
+  --merc-border-active: rgba(255, 255, 255, 0.35);
+  --merc-border-glow: rgba(255, 255, 255, 0.2);
+
+  /* Functional Telemetry Signals */
+  --merc-signal-cyan: #38BDF8;
+  --merc-signal-green: #10B981;
+  --merc-signal-amber: #F59E0B;
+  --merc-signal-red: #EF4444;
+
+  /* Code & Syntax */
+  --merc-code-bg: #0C0D11;
+  --merc-code-text: #E2E8F0;
+  --merc-code-kw: #F472B6;
+  --merc-code-str: #34D399;
+  --merc-code-key: #38BDF8;
+  --merc-code-num: #FBBF24;
+  --merc-code-cmt: #64748B;
+
+  /* Elevation Shadows & Caustics */
+  --merc-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.5);
+  --merc-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.65);
+  --merc-shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.8);
+  --merc-shadow-glow: 0 0 32px rgba(255, 255, 255, 0.08);
+
+  /* Fonts */
+  --merc-font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --merc-font-mono: 'JetBrains Mono', 'Fira Code', Menlo, Monaco, Consolas, monospace;
+
+  /* Layout */
+  --merc-container-max: 1280px;
+  --merc-radius-sm: 6px;
+  --merc-radius-md: 10px;
+  --merc-radius-lg: 16px;
+}
+
+/* ==========================================================================
+   Global Base & Typography
+   ========================================================================== */
+
+.mercury-platform {
+  background-color: var(--merc-bg);
+  color: var(--merc-text-primary);
+  font-family: var(--merc-font-sans);
+  line-height: 1.6;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+
+.mercury-platform *,
+.mercury-platform *::before,
+.mercury-platform *::after {
+  box-sizing: border-box;
+}
+
+::selection {
+  background-color: #FFFFFF;
+  color: #08090B;
+}
+
+code {
+  font-family: var(--merc-font-mono);
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Fluid background illumination */
+.mercury-platform::before {
+  content: '';
+  position: fixed;
+  top: -20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1200px;
+  height: 800px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.035) 0%, rgba(56, 189, 248, 0.015) 35%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.merc-container {
+  max-width: var(--merc-container-max);
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ==========================================================================
+   Liquid Mercury Cursor (Canvas metaball & physics engine)
+   ========================================================================== */
+
+.merc-cursor-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ==========================================================================
+   Header & Floating Navigation
+   ========================================================================== */
+
+.merc-header-sticky {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  background: rgba(8, 9, 11, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--merc-border);
+  z-index: 1000;
+  transition: all 0.2s ease;
+}
+
+.merc-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+  gap: 24px;
+}
+
+.merc-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--merc-text-primary);
+  flex-shrink: 0;
+}
+
+.merc-brand:hover {
+  color: #FFFFFF;
+}
+
+.merc-brand-text {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.merc-status-badge {
+  font-family: var(--merc-font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: var(--merc-radius-sm);
+  background: rgba(56, 189, 248, 0.1);
+  color: var(--merc-signal-cyan);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.merc-pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--merc-signal-cyan);
+  box-shadow: 0 0 6px var(--merc-signal-cyan);
+}
+
+.merc-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+}
+
+.merc-nav-links a {
+  text-decoration: none;
+  color: var(--merc-silver);
+  font-size: 0.90rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: color 0.15s ease;
+}
+
+.merc-nav-links a:hover {
+  color: #FFFFFF;
+}
+
+.merc-nav-external {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.merc-nav-external svg {
+  opacity: 0.7;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.merc-nav-external:hover svg {
+  opacity: 1;
+  transform: translate(1px, -1px);
+}
+
+.merc-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.merc-btn-secondary {
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #FFFFFF !important;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  padding: 8px 16px;
+  border-radius: var(--merc-radius-sm);
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.18s ease;
+  backdrop-filter: blur(8px);
+}
+
+.merc-btn-secondary:hover {
+  color: #FFFFFF !important;
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.45);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45), 0 0 12px rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+}
+
+.merc-btn-primary {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: linear-gradient(135deg, #FFFFFF 0%, #E2E8F0 100%);
+  color: #08090B !important;
+  padding: 9px 18px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border-radius: var(--merc-radius-sm);
+  border: 1px solid #FFFFFF;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4), 0 0 16px rgba(255, 255, 255, 0.2), inset 0 1px 0 rgba(255, 255, 255, 1);
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.merc-btn-primary:hover {
+  background: #FFFFFF;
+  box-shadow: 0 4px 22px rgba(255, 255, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+.merc-nav-cta-full {
+  display: inline;
+}
+
+.merc-nav-cta-compact {
+  display: none;
+}
+
+/* ==========================================================================
+   Hero Section & Asymmetrical Liquid Core
+   ========================================================================== */
+
+.merc-hero-section {
+  padding: 80px 0 60px;
+}
+
+.merc-hero-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.95fr;
+  gap: 56px;
+  align-items: center;
+}
+
+.merc-hero-copy {
+  display: flex;
+  flex-direction: column;
+}
+
+.merc-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--merc-font-mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--merc-silver-muted);
+  margin-bottom: 20px;
+}
+
+.merc-hero-headline {
+  font-size: clamp(1.75rem, 5.5vw, 4.1rem);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  color: #FFFFFF;
+  margin: 0 0 24px;
+}
+
+.merc-hero-headline span.headline-accent {
+  color: var(--merc-silver-muted);
+}
+
+.merc-hero-description {
+  font-size: 1.15rem;
+  line-height: 1.65;
+  color: var(--merc-text-secondary);
+  margin: 0 0 32px;
+  max-width: 580px;
+}
+
+.merc-hero-ctas {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 36px;
+}
+
+/* Audience Segment Toggles */
+.merc-audience-tabs {
+  display: inline-flex;
+  background: rgba(16, 18, 23, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--merc-radius-sm);
+  padding: 4px;
+  gap: 6px;
+  align-self: flex-start;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  margin-bottom: 4px;
+}
+
+.merc-audience-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--merc-silver);
+  font-size: 0.86rem;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: var(--merc-radius-sm);
+  cursor: pointer;
+  transition: all 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.merc-audience-btn:hover {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.merc-audience-btn.active {
+  background: #FFFFFF;
+  color: #08090B !important;
+  box-shadow: 0 2px 14px rgba(255, 255, 255, 0.3);
+  font-weight: 700;
+}
+
+.merc-hero-feature-pills {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+
+.merc-hero-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--merc-font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--merc-silver);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--merc-border);
+  padding: 6px 14px;
+  border-radius: 999px;
+  backdrop-filter: blur(8px);
+}
+
+/* Right Column: Liquid Mercury Centerpiece Canvas & Kinetic Mesh Stage */
+.merc-core-stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 560px;
+  width: 100%;
+}
+
+.merc-hero-webgl-canvas {
+  width: 100%;
+  height: 560px;
+  max-width: 600px;
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+
+/* Floating Telemetry Glass Cards (Framing the sculpture like in preview-1) */
+.merc-float-panel {
+  position: absolute;
+  background: var(--merc-surface-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--merc-border);
+  border-radius: var(--merc-radius-md);
+  padding: 12px 16px;
+  box-shadow: var(--merc-shadow-md);
+  z-index: 3;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  pointer-events: auto;
+}
+
+.merc-float-panel:hover {
+  border-color: var(--merc-border-active);
+  transform: translateY(-2px);
+}
+
+.merc-panel-top-left {
+  top: 14px;
+  left: 0px;
+  width: 250px;
+  max-width: calc(50% - 14px);
+}
+
+.merc-panel-top-right {
+  top: 24px;
+  right: 12px;
+  width: 175px;
+}
+
+.merc-panel-bottom-right {
+  bottom: 16px;
+  right: 12px;
+  width: 250px;
+  max-width: calc(50% - 14px);
+}
+
+.merc-panel-bottom-left {
+  bottom: 24px;
+  left: 0px;
+  width: 195px;
+}
+
+.merc-hero-mobile-telemetry {
+  display: none;
+}
+
+.merc-float-title {
+  font-family: var(--merc-font-mono);
+  font-size: 0.70rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--merc-text-muted);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  letter-spacing: 0.04em;
+}
+
+.merc-float-code {
+  margin: 0;
+  font-family: var(--merc-font-mono);
+  font-size: 0.69rem;
+  line-height: 1.45;
+  color: var(--merc-silver);
+  background: rgba(0, 0, 0, 0.45);
+  padding: 7px 10px;
+  border-radius: var(--merc-radius-sm);
+  border: 1px solid var(--merc-border-subtle);
+  overflow-x: auto;
+}
+
+.merc-float-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--merc-font-mono);
+  font-size: 0.76rem;
+  color: var(--merc-silver);
+  background: rgba(0, 0, 0, 0.45);
+  padding: 7px 10px;
+  border-radius: var(--merc-radius-sm);
+  border: 1px solid var(--merc-border-subtle);
+}
+
+/* ==========================================================================
+   Dual Audience Journeys (End Users vs Developers)
+   ========================================================================== */
+
+.merc-section {
+  padding: 80px 0;
+  border-top: 1px solid var(--merc-border-subtle);
+}
+
+.merc-section-header {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto 56px;
+}
+
+.merc-section-title {
+  font-size: clamp(2rem, 3.5vw, 2.75rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin: 0 0 16px;
+  color: #FFFFFF;
+}
+
+.merc-section-subtitle {
+  font-size: 1.05rem;
+  color: var(--merc-text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.merc-journeys-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 28px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.merc-journey-card {
+  background: var(--merc-surface);
+  border: 1px solid var(--merc-border);
+  border-radius: var(--merc-radius-lg);
+  padding: 36px;
+  box-shadow: var(--merc-shadow-sm);
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.merc-journey-card:hover {
+  border-color: var(--merc-border-active);
+  box-shadow: var(--merc-shadow-md);
+  transform: translateY(-2px);
+}
+
+.merc-journey-badge {
+  display: inline-block;
+  font-family: var(--merc-font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 3px 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--merc-radius-sm);
+  color: var(--merc-silver);
+  margin-bottom: 20px;
+}
+
+.merc-journey-card h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 12px;
+  color: #FFFFFF;
+}
+
+.merc-journey-card p {
+  font-size: 0.95rem;
+  color: var(--merc-text-secondary);
+  line-height: 1.6;
+  margin: 0 0 24px;
+}
+
+.merc-journey-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.merc-journey-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.9rem;
+  color: var(--merc-silver);
+}
+
+.merc-journey-list svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: var(--merc-silver-muted);
+}
+
+/* Dedicated High-Contrast Journey Call-To-Action Buttons */
+.merc-btn-journey-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #FFFFFF 0%, #F1F5F9 50%, #E2E8F0 100%);
+  color: #08090B !important;
+  font-weight: 700;
+  font-size: 0.96rem;
+  letter-spacing: -0.01em;
+  padding: 13px 24px;
+  border-radius: var(--merc-radius-md);
+  border: 1px solid #FFFFFF;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5), 0 0 22px rgba(255, 255, 255, 0.22), inset 0 1px 0 rgba(255, 255, 255, 1);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+  margin-top: 6px;
+}
+
+.merc-btn-journey-cta:hover {
+  background: #FFFFFF;
+  color: #000000 !important;
+  box-shadow: 0 6px 26px rgba(255, 255, 255, 0.45), 0 0 34px rgba(255, 255, 255, 0.35);
+  transform: translateY(-2px);
+}
+
+.merc-btn-journey-cta:active {
+  transform: translateY(0);
+}
+
+.merc-btn-journey-cta svg {
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.merc-btn-journey-cta:hover svg {
+  transform: translateX(4px);
+}
+
+.merc-btn-journey-cta.user-cta {
+  background: linear-gradient(135deg, #FFFFFF 0%, #E0F2FE 50%, #BAE6FD 100%);
+  border-color: #BAE6FD;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5), 0 0 24px rgba(56, 189, 248, 0.3), inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+.merc-btn-journey-cta.user-cta:hover {
+  background: #FFFFFF;
+  box-shadow: 0 6px 26px rgba(56, 189, 248, 0.5), 0 0 34px rgba(255, 255, 255, 0.35);
+}
+
+/* ==========================================================================
+   Literal Liquid Mercury vs. Vapor Chamber Component Styles
+   ========================================================================== */
+
+/* ==========================================================================
+   Horizontal Cylindrical Glass Hyper-Chamber (Exact match to Mocks)
+   Matches mockup-liquid-mercury-users.jpg & mockup-gaseous-vapor-devs.jpg
+   ========================================================================== */
+
+.merc-cylinder-section {
+  position: relative;
+  padding: 70px 0 95px;
+  overflow: hidden;
+}
+
+/* Capsule Pill Toggle Switcher */
+.merc-chamber-toggle-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 22px auto 30px;
+}
+
+.merc-chamber-toggle-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  background: rgba(10, 14, 22, 0.92);
+  border: 1.5px solid #22D3EE;
+  border-radius: 9999px;
+  padding: 6px 26px 6px 8px;
+  cursor: pointer;
+  gap: 14px;
+  box-shadow: 0 0 22px rgba(34, 211, 238, 0.55), inset 0 0 10px rgba(34, 211, 238, 0.25);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.merc-chamber-toggle-btn:hover {
+  border-color: #38BDF8;
+  box-shadow: 0 0 30px rgba(34, 211, 238, 0.75), inset 0 0 14px rgba(34, 211, 238, 0.35);
+  transform: translateY(-1px);
+}
+
+.merc-chamber-toggle-thumb {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #475569 0%, #1E293B 100%);
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.merc-chamber-toggle-thumb.right {
+  background: linear-gradient(180deg, #22D3EE 0%, #0284C7 100%);
+  border-color: #FFFFFF;
+  box-shadow: 0 0 14px rgba(34, 211, 238, 0.85);
+}
+
+.merc-chamber-toggle-label {
+  font-family: var(--merc-font-sans);
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  letter-spacing: -0.01em;
+}
+
+/* Horizontal Cylindrical Glass Chamber Stage */
+.merc-cylinder-stage {
+  position: relative;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Metallic Chrome End-Caps (Matching Mockups) */
+.merc-cylinder-cap {
+  width: 54px;
+  height: 420px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.merc-cylinder-cap.cap-left {
+  border-radius: 28px 0 0 28px;
+  background: linear-gradient(180deg, #1E293B 0%, #475569 15%, #CBD5E1 32%, #FFFFFF 48%, #94A3B8 62%, #334155 82%, #1E293B 100%);
+  box-shadow: -12px 0 35px rgba(0, 0, 0, 0.95), inset -2px 0 4px rgba(255, 255, 255, 0.4);
+  border-right: 2px solid #22D3EE;
+}
+
+.merc-cylinder-cap.cap-right {
+  border-radius: 0 28px 28px 0;
+  background: linear-gradient(180deg, #1E293B 0%, #475569 15%, #CBD5E1 32%, #FFFFFF 48%, #94A3B8 62%, #334155 82%, #1E293B 100%);
+  box-shadow: 12px 0 35px rgba(0, 0, 0, 0.95), inset 2px 0 4px rgba(255, 255, 255, 0.4);
+  border-left: 2px solid #22D3EE;
+}
+
+.merc-cap-inner-glow {
+  position: absolute;
+  inset: 8px 6px;
+  border-radius: 20px;
+  border: 1.5px solid #22D3EE;
+  box-shadow: 0 0 22px rgba(34, 211, 238, 0.75), inset 0 0 14px rgba(34, 211, 238, 0.75);
+  pointer-events: none;
+}
+
+/* Cylindrical Glass Body */
+.merc-cylinder-body {
+  position: relative;
+  flex: 1;
+  height: 420px;
+  background: radial-gradient(120% 100% at 50% 50%, #0A0D15 0%, #040508 100%);
+  border-top: 2px solid rgba(255, 255, 255, 0.35);
+  border-bottom: 2px solid rgba(34, 211, 238, 0.45);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.95),
+              inset 0 3px 12px rgba(255, 255, 255, 0.15),
+              inset 0 -3px 15px rgba(34, 211, 238, 0.25);
+  overflow: hidden;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 38px 28px;
+  transition: all 0.35s ease;
+}
+
+/* Glass Specular Edge Glints */
+.merc-cylinder-glass-edge {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.merc-cylinder-glass-edge.top-edge {
+  top: 0;
+  background: linear-gradient(90deg, transparent, #FFFFFF, transparent);
+  opacity: 0.85;
+}
+
+.merc-cylinder-glass-edge.bottom-edge {
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, #22D3EE, transparent);
+  opacity: 0.80;
+}
+
+/* Real-time Canvas (Molten Liquid Mercury OR Gaseous Vapor + Cyan Wireframe) */
+.merc-cylinder-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 3 Suspended Floating Frosted Glass Cards (Exact match to Mocks) */
+.merc-cylinder-cards {
+  position: relative;
+  z-index: 4;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  width: 100%;
+  max-width: 1040px;
+  margin-top: 8px;
+}
+
+.merc-cylinder-card {
+  background: rgba(14, 18, 28, 0.68);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 14px;
+  padding: 24px 22px;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.70), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transition: all 0.22s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 140px;
+}
+
+.merc-cylinder-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.45);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.85);
+}
+
+.merc-cylinder-card.user-card {
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.merc-cylinder-card.dev-card {
+  border-color: rgba(56, 189, 248, 0.35);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.70), 0 0 20px rgba(56, 189, 248, 0.12);
+}
+
+.merc-cylinder-card.dev-card:hover {
+  border-color: #22D3EE;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.85), 0 0 28px rgba(34, 211, 238, 0.28);
+}
+
+.merc-cylinder-card h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0 0 10px;
+  letter-spacing: -0.015em;
+  line-height: 1.35;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+.merc-cylinder-card p {
+  font-size: 0.88rem;
+  color: #CBD5E1;
+  margin: 0;
+  line-height: 1.45;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+.merc-cylinder-code {
+  font-family: var(--merc-font-mono);
+  font-size: 0.74rem;
+  background: rgba(8, 12, 18, 0.88);
+  border: 1px solid rgba(56, 189, 248, 0.40);
+  color: #7DD3FC;
+  padding: 6px 10px;
+  border-radius: 6px;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  margin-top: auto;
+}
+
+/* Glowing Cyan CTA Button Centered Below Chamber (Exact match to Mocks) */
+.merc-cylinder-cta-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 34px;
+}
+
+.merc-cylinder-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #22D3EE;
+  color: #000000 !important;
+  font-family: var(--merc-font-sans);
+  font-size: 1.02rem;
+  font-weight: 700;
+  padding: 13px 36px;
+  border-radius: 9999px;
+  text-decoration: none;
+  box-shadow: 0 0 35px rgba(34, 211, 238, 0.75), 0 4px 18px rgba(34, 211, 238, 0.45);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.merc-cylinder-cta:hover {
+  transform: translateY(-2px);
+  background: #38BDF8;
+  box-shadow: 0 0 45px rgba(34, 211, 238, 0.95), 0 6px 24px rgba(34, 211, 238, 0.60);
+  color: #000000 !important;
+}
+
+@media (max-width: 900px) {
+  .merc-cylinder-stage {
+    flex-direction: column;
+  }
+  .merc-cylinder-cap {
+    width: 100%;
+    height: 18px;
+    border-radius: 12px 12px 0 0;
+  }
+  .merc-cylinder-cap.cap-left {
+    border-radius: 14px 14px 0 0;
+    border-right: none;
+    border-bottom: 2px solid #22D3EE;
+  }
+  .merc-cylinder-cap.cap-right {
+    border-radius: 0 0 14px 14px;
+    border-left: none;
+    border-top: 2px solid #22D3EE;
+  }
+  .merc-cylinder-body {
+    width: 100%;
+    height: auto;
+    min-height: 480px;
+    padding: 24px 16px;
+  }
+  .merc-cylinder-cards {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .merc-cylinder-card {
+    min-height: auto;
+  }
+}
+
+/* ==========================================================================
+   Interactive Protocol Simulator (Guided vs Live)
+   ========================================================================== */
+
+.merc-simulator-console {
+  background: var(--merc-surface);
+  border: 1px solid var(--merc-border);
+  border-radius: var(--merc-radius-lg);
+  box-shadow: var(--merc-shadow-lg);
+  overflow: hidden;
+  margin-bottom: 40px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.merc-sim-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: var(--merc-bg-subtle);
+  border-bottom: 1px solid var(--merc-border);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.merc-sim-title-group h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0 0 3px;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.merc-sim-title-group p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--merc-text-muted);
+}
+
+.merc-sim-mode-toggle {
+  display: flex;
+  background: var(--merc-surface-elevated);
+  border: 1px solid var(--merc-border);
+  border-radius: var(--merc-radius-sm);
+  padding: 3px;
+  gap: 4px;
+}
+
+.merc-mode-btn {
+  background: transparent;
+  border: none;
+  color: var(--merc-text-muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: var(--merc-radius-sm);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.merc-mode-btn.active {
+  background: #FFFFFF;
+  color: #08090B;
+}
+
+/* Live server configuration strip */
+.merc-live-config-strip {
+  background: rgba(56, 189, 248, 0.05);
+  border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 0.84rem;
+}
+
+.merc-live-config-strip input {
+  background: #08090B;
+  border: 1px solid var(--merc-border);
+  border-radius: var(--merc-radius-sm);
+  color: #FFFFFF;
+  padding: 6px 10px;
+  font-family: var(--merc-font-mono);
+  font-size: 0.8rem;
+  flex: 1;
+}
+
+/* 5-Step Simulator Pipeline */
+.merc-sim-pipeline {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border-bottom: 1px solid var(--merc-border);
+}
+
+.merc-sim-step-tab {
+  background: var(--merc-surface);
+  border: none;
+  border-right: 1px solid var(--merc-border-subtle);
+  padding: 18px 16px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.merc-sim-step-tab:last-child {
+  border-right: none;
+}
+
+.merc-sim-step-tab:hover {
+  background: var(--merc-surface-elevated);
+}
+
+.merc-sim-step-tab.active {
+  background: var(--merc-surface-active);
+  box-shadow: inset 0 2px 0 #FFFFFF;
+}
+
+.merc-step-num {
+  font-family: var(--merc-font-mono);
+  font-size: 0.72rem;
+  color: var(--merc-text-muted);
+  margin-bottom: 4px;
+}
+
+.merc-sim-step-tab.active .merc-step-num {
+  color: var(--merc-signal-cyan);
+}
+
+.merc-step-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--merc-text-primary);
+  line-height: 1.35;
+}
+
+/* Simulator Body & Inspection Console */
+.merc-sim-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  min-height: 380px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.merc-sim-pane-left {
+  padding: 24px;
+  border-right: 1px solid var(--merc-border);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.merc-sim-pane-right {
+  padding: 24px;
+  background: var(--merc-code-bg);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.merc-sim-stage-desc {
+  font-size: 0.95rem;
+  color: var(--merc-silver);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.merc-params-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  margin-bottom: 24px;
+}
+
+.merc-params-table th {
+  text-align: left;
+  padding: 8px 10px;
+  color: var(--merc-text-muted);
+  border-bottom: 1px solid var(--merc-border);
+  font-family: var(--merc-font-mono);
+}
+
+.merc-params-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--merc-border-subtle);
+  color: var(--merc-text-primary);
+}
+
+.merc-params-table code {
+  font-family: var(--merc-font-mono);
+  color: var(--merc-signal-cyan);
+}
+
+.merc-sim-action-row {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.merc-code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--merc-border-subtle);
+}
+
+.merc-code-header span {
+  font-family: var(--merc-font-mono);
+  font-size: 0.78rem;
+  color: var(--merc-text-muted);
+}
+
+.merc-code-block {
+  font-family: var(--merc-font-mono);
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: var(--merc-code-text);
+  margin: 0;
+  overflow-x: auto;
+  flex: 1;
+}
+
+/* Code Tabs in Simulator */
+.merc-code-tabs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.merc-code-tab {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--merc-text-muted);
+  font-family: var(--merc-font-mono);
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: var(--merc-radius-sm);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.merc-code-tab:hover {
+  color: var(--merc-text-secondary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.merc-code-tab.active {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--merc-border);
+}
+
+/* Simulator Nav Buttons */
+.merc-sim-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #FFFFFF;
+  font-family: var(--merc-font-sans);
+  font-size: 0.84rem;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: var(--merc-radius-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: all 0.18s ease;
+}
+
+.merc-sim-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.16);
+  color: #FFFFFF;
+  border-color: rgba(255, 255, 255, 0.45);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  transform: translateY(-1px);
+}
+
+.merc-sim-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.merc-sim-btn.primary {
+  background: linear-gradient(135deg, #FFFFFF 0%, #E2E8F0 100%);
+  color: #08090B !important;
+  border-color: #FFFFFF;
+  font-weight: 700;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4), 0 0 16px rgba(255, 255, 255, 0.22);
+}
+
+.merc-sim-btn.primary:hover:not(:disabled) {
+  background: #FFFFFF;
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+/* Live Playground Specifics */
+.merc-live-trigger-btn {
+  background: var(--merc-signal-cyan);
+  color: #08090B;
+  border: none;
+  font-family: var(--merc-font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 7px 14px;
+  border-radius: var(--merc-radius-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.merc-live-trigger-btn:hover:not(:disabled) {
+  background: #7DD3FC;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+}
+
+.merc-live-trigger-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.merc-live-status-pill {
+  font-family: var(--merc-font-mono);
+  font-size: 0.74rem;
+  padding: 4px 10px;
+  border-radius: var(--merc-radius-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--merc-border);
+}
+
+.merc-live-status-pill.success {
+  color: var(--merc-signal-green);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.merc-live-status-pill.error {
+  color: var(--merc-signal-red);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.merc-live-status-pill.loading {
+  color: var(--merc-signal-amber);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.merc-live-latency {
+  color: var(--merc-text-muted);
+  font-size: 0.7rem;
+}
+
+/* ==========================================================================
+   Architecture & Capabilities Grids
+   ========================================================================== */
+
+.merc-arch-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.merc-arch-card {
+  background: var(--merc-surface);
+  border: 1px solid var(--merc-border);
+  border-radius: var(--merc-radius-md);
+  padding: 24px;
+  box-shadow: var(--merc-shadow-sm);
+  transition: all 0.2s ease;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.merc-arch-card:hover {
+  border-color: var(--merc-border-active);
+  transform: translateY(-2px);
+}
+
+.merc-arch-num {
+  font-family: var(--merc-font-mono);
+  font-size: 0.72rem;
+  color: var(--merc-text-muted);
+  margin-bottom: 12px;
+}
+
+.merc-arch-card h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 8px;
+  color: #FFFFFF;
+}
+
+.merc-arch-card p {
+  font-size: 0.85rem;
+  color: var(--merc-text-secondary);
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* Capabilities Grid */
+.merc-cap-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.merc-cap-card {
+  background: var(--merc-surface);
+  border: 1px solid var(--merc-border);
+  border-radius: var(--merc-radius-md);
+  padding: 28px;
+  box-shadow: var(--merc-shadow-sm);
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.merc-cap-card:hover {
+  border-color: var(--merc-border-active);
+  transform: translateY(-2px);
+  box-shadow: var(--merc-shadow-md);
+}
+
+.merc-cap-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  min-width: 0;
+}
+
+.merc-cap-badge {
+  font-family: var(--merc-font-mono);
+  font-size: 0.72rem;
+  padding: 3px 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--merc-radius-sm);
+  color: var(--merc-silver);
+}
+
+.merc-cap-status {
+  font-family: var(--merc-font-mono);
+  font-size: 0.72rem;
+  color: var(--merc-signal-green);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.merc-cap-card h4 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 0 0 10px;
+  color: #FFFFFF;
+}
+
+.merc-cap-card p {
+  font-size: 0.88rem;
+  color: var(--merc-text-secondary);
+  line-height: 1.6;
+  margin: 0 0 18px;
+  flex: 1;
+}
+
+.merc-cap-endpoint {
+  font-family: var(--merc-font-mono);
+  font-size: 0.76rem;
+  color: var(--merc-signal-cyan);
+  background: var(--merc-code-bg);
+  padding: 6px 10px;
+  border-radius: var(--merc-radius-sm);
+  border: 1px solid var(--merc-border-subtle);
+  overflow-x: auto;
+  white-space: nowrap;
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* ==========================================================================
+   Developer Integration & Quick Start
+   ========================================================================== */
+
+.merc-dev-console {
+  background: var(--merc-surface);
+  border: 1px solid var(--merc-border);
+  border-radius: var(--merc-radius-lg);
+  padding: 36px;
+  box-shadow: var(--merc-shadow-lg);
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.merc-dev-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 36px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.merc-dev-section {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.merc-dev-section h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 10px;
+  color: #FFFFFF;
+}
+
+.merc-dev-section p {
+  font-size: 0.92rem;
+  color: var(--merc-text-secondary);
+  margin: 0 0 20px;
+  line-height: 1.6;
+}
+
+.merc-cmd-box {
+  background: var(--merc-code-bg);
+  border: 1px solid var(--merc-border);
+  border-radius: var(--merc-radius-sm);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.merc-cmd-box code {
+  font-family: var(--merc-font-mono);
+  font-size: 0.84rem;
+  color: var(--merc-code-str);
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.merc-copy-trigger {
+  background: transparent;
+  border: 1px solid var(--merc-border);
+  color: var(--merc-text-secondary);
+  font-family: var(--merc-font-mono);
+  font-size: 0.72rem;
+  padding: 4px 8px;
+  border-radius: var(--merc-radius-sm);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.merc-copy-trigger:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+
+.merc-footer {
+  border-top: 1px solid var(--merc-border-subtle);
+  background: var(--merc-bg-subtle);
+  padding: 56px 0 36px;
+}
+
+.merc-footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 48px;
+}
+
+.merc-footer-brand h4 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0 0 12px;
+}
+
+.merc-footer-brand p {
+  font-size: 0.88rem;
+  color: var(--merc-text-secondary);
+  max-width: 380px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.merc-footer-col h5 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--merc-text-muted);
+  margin: 0 0 16px;
+}
+
+.merc-footer-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.merc-footer-col a {
+  text-decoration: none;
+  color: var(--merc-text-secondary);
+  font-size: 0.88rem;
+  transition: color 0.15s ease;
+}
+
+.merc-footer-col a:hover {
+  color: #FFFFFF;
+}
+
+.merc-footer-bottom {
+  border-top: 1px solid var(--merc-border-subtle);
+  padding-top: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  color: var(--merc-text-muted);
+}
+
+/* ==========================================================================
+   Responsive & Accessibility
+   ========================================================================== */
+
+/* ==========================================================================
+   Mobile Navigation Toggle & Accessible Fullscreen Drawer
+   ========================================================================== */
+
+.merc-mobile-toggle {
+  display: none;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--merc-border);
+  border-radius: var(--merc-radius-sm);
+  color: var(--merc-text-primary);
+  padding: 8px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.merc-mobile-toggle:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: #FFFFFF;
+}
+
+.merc-mobile-drawer {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  background: rgba(8, 9, 11, 0.98);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  padding: 20px 24px 36px;
+  box-shadow: var(--merc-shadow-lg);
+  z-index: 2000;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.merc-mobile-drawer-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--merc-border-subtle);
+  margin-bottom: 20px;
+}
+
+.merc-mobile-close-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--merc-border);
+  border-radius: var(--merc-radius-sm);
+  color: var(--merc-text-primary);
+  padding: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.merc-mobile-close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: #FFFFFF;
+}
+
+.merc-mobile-drawer-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.merc-mobile-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--merc-border-subtle);
+}
+
+.merc-mobile-drawer-ver {
+  font-family: var(--merc-font-mono);
+  font-size: 0.72rem;
+  color: var(--merc-text-muted);
+}
+
+.merc-mobile-nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.merc-mobile-nav-list a {
+  color: var(--merc-silver);
+  text-decoration: none;
+  font-size: 1.05rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: var(--merc-radius-sm);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+}
+
+.merc-mobile-nav-list a:hover {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.09);
+  border-color: var(--merc-border-active);
+  transform: translateX(4px);
+}
+
+.merc-mobile-drawer-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--merc-border-subtle);
+}
+
+.merc-mobile-drawer-actions a {
+  text-align: center;
+  justify-content: center;
+  padding: 13px 20px;
+  font-size: 0.95rem;
+}
+
+/* ==========================================================================
+   OIDC Protocol Flow Section — Kinetic Chrome Mesh Visualization
+   ========================================================================== */
+
+.merc-oidc-flow-section {
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 25%, rgba(251, 191, 36, 0.03) 0%, transparent 70%);
+}
+
+.merc-oidc-flow-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--merc-font-mono);
+  font-size: 0.74rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 5px 14px;
+  border-radius: 100px;
+  background: rgba(56, 189, 248, 0.08);
+  color: var(--merc-signal-cyan);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  margin-bottom: 18px;
+}
+
+.merc-flow-canvas-wrap {
+  position: relative;
+  width: 100%;
+  height: auto;
+  min-height: auto;
+  margin: 28px 0 0;
+  display: block;
+}
+
+.merc-flow-mesh-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: pointer;
+}
+
+/* Node-attached flow cards — Alternating desktop layout, vertical stack on mobile */
+.merc-node-card {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  padding: 14px 16px;
+  border-radius: var(--merc-radius-md);
+  background: rgba(13, 17, 25, 0.88);
+  border: 1px solid var(--merc-border);
+  color: inherit;
+  font: inherit;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+}
+
+.merc-node-card:hover,
+.merc-node-card.hot {
+  background: rgba(22, 28, 40, 0.95);
+  border-color: rgba(203, 213, 225, 0.35);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 16px rgba(255, 255, 255, 0.06);
+}
+
+.merc-node-card.active {
+  background: linear-gradient(145deg, rgba(251, 191, 36, 0.08) 0%, rgba(13, 17, 23, 0.96) 100%);
+  border-color: #FBBF24;
+  box-shadow: 0 0 24px rgba(251, 191, 36, 0.22), 0 4px 20px rgba(0, 0, 0, 0.5);
+  transform: translateY(-2px);
+}
+
+.merc-node-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.merc-node-card-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 24px;
+  padding: 0 6px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--merc-border);
+  color: #FFFFFF;
+  font-family: var(--merc-font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.merc-node-card.active .merc-node-card-num {
+  background: #FBBF24;
+  color: #08090B;
+  border-color: #FBBF24;
+  font-weight: 800;
+}
+
+.merc-node-card-title {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.3;
+  margin-bottom: 6px;
+}
+
+.merc-node-card.active .merc-node-card-title {
+  color: #FFFFFF;
+}
+
+.merc-node-card-arrow {
+  color: var(--merc-silver-muted);
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+}
+
+.merc-node-card.active .merc-node-card-arrow {
+  color: #FBBF24;
+  transform: translateX(2px);
+}
+
+.merc-node-card-endpoint {
+  display: inline-block;
+  font-family: var(--merc-font-mono);
+  font-size: 0.68rem;
+  color: var(--merc-silver-muted);
+  background: rgba(0, 0, 0, 0.5);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--merc-border-subtle);
+  margin-bottom: 8px;
+  word-break: break-all;
+  max-width: 100%;
+}
+
+.merc-node-card.active .merc-node-card-endpoint {
+  color: #FBBF24;
+  border-color: rgba(251, 191, 36, 0.35);
+  background: rgba(251, 191, 36, 0.08);
+}
+
+.merc-node-card-desc {
+  font-size: 0.74rem;
+  line-height: 1.45;
+  color: var(--merc-silver);
+  margin: 0;
+}
+
+.merc-node-card-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  margin-top: 16px;
+}
+
+/* Fallback stage buttons for any legacy references */
+.merc-flow-stages {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+  width: 100%;
+}
+
+.merc-flow-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  background: var(--merc-surface);
+  border: 1px solid var(--merc-border);
+  border-radius: var(--merc-radius-md);
+  padding: 18px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  width: 100%;
+}
+
+.merc-flow-stage:hover {
+  background: var(--merc-surface-elevated);
+  border-color: var(--merc-border-active);
+  transform: translateY(-2px);
+}
+
+.merc-flow-stage.active {
+  background: rgba(251, 191, 36, 0.06);
+  border-color: #FBBF24;
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.14);
+}
+
+.merc-flow-stage-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.merc-flow-stage-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--merc-radius-sm);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--merc-border);
+  color: #FFFFFF;
+  font-family: var(--merc-font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.merc-flow-stage.active .merc-flow-stage-num {
+  background: #FBBF24;
+  color: #08090B;
+  border-color: #FBBF24;
+}
+
+.merc-flow-stage-arrow {
+  color: var(--merc-silver-muted);
+  font-size: 1.1rem;
+  transition: color 0.2s ease;
+}
+
+.merc-flow-stage.active .merc-flow-stage-arrow {
+  color: #FBBF24;
+}
+
+.merc-flow-stage-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.merc-flow-stage-label {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.35;
+}
+
+.merc-flow-stage-sub {
+  font-family: var(--merc-font-mono);
+  font-size: 0.70rem;
+  color: var(--merc-silver-muted);
+  background: rgba(0, 0, 0, 0.45);
+  padding: 3px 6px;
+  border-radius: var(--merc-radius-sm);
+  border: 1px solid var(--merc-border-subtle);
+  align-self: flex-start;
+  word-break: break-all;
+}
+
+.merc-flow-stage.active .merc-flow-stage-sub {
+  color: #FBBF24;
+  border-color: rgba(251, 191, 36, 0.3);
+}
+
+.merc-flow-stage-desc {
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--merc-text-muted);
+  margin: 4px 0 0;
+}
+
+/* ==========================================================================
+   Developer Integration Box & Notice Styles
+   ========================================================================== */
+
+.merc-dev-header-badge {
+  font-family: var(--merc-font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--merc-signal-cyan);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.merc-integration-box {
+  background: var(--merc-code-bg);
+  border: 1px solid var(--merc-border);
+  border-radius: var(--merc-radius-sm);
+  padding: 16px;
+  margin-top: 14px;
+  overflow: hidden;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.merc-integration-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--merc-border-subtle);
+  min-width: 0;
+}
+
+.merc-integration-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-width: 0;
+}
+
+.merc-integration-pre {
+  margin: 0;
+  font-family: var(--merc-font-mono);
+  font-size: 0.78rem;
+  color: var(--merc-silver);
+  line-height: 1.55;
+  overflow-x: auto;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.merc-dev-notice {
+  background: rgba(56, 189, 248, 0.04);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: var(--merc-radius-sm);
+  padding: 12px 14px;
+  margin-top: 14px;
+  font-size: 0.82rem;
+  color: var(--merc-silver-muted);
+  line-height: 1.55;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.merc-dev-notice p {
+  margin: 0;
+}
+
+.merc-notice-title {
+  font-family: var(--merc-font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--merc-signal-cyan);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* ==========================================================================
+   Responsive Breakpoints & Layout Adaptations
+   ========================================================================== */
+
+:focus-visible {
+  outline: 2px solid #FFFFFF !important;
+  outline-offset: 2px !important;
+}
+
+/* 1. Large Tablet / Laptop (1024px) */
+@media (max-width: 1280px) and (min-width: 1025px) {
+  .merc-nav-links {
+    gap: 14px;
+  }
+  .merc-nav-links a {
+    font-size: 0.84rem;
+  }
+  .merc-nav-actions {
+    gap: 8px;
+  }
+  .merc-nav-actions .merc-btn-secondary {
+    padding: 7px 11px;
+    font-size: 0.80rem;
+  }
+  .merc-btn-primary.merc-nav-cta {
+    padding: 7px 12px;
+    font-size: 0.82rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .merc-nav-links {
+    display: none;
+  }
+  .merc-mobile-toggle {
+    display: inline-flex;
+  }
+  .merc-nav-actions .merc-btn-secondary {
+    display: none;
+  }
+  .merc-nav-cta-full {
+    display: none;
+  }
+  .merc-nav-cta-compact {
+    display: inline;
+  }
+  .merc-btn-primary.merc-nav-cta {
+    padding: 7px 14px;
+    font-size: 0.84rem;
+  }
+  .merc-hero-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .merc-hero-copy {
+    align-items: center;
+    order: 1;
+  }
+  .merc-core-stage {
+    order: 2;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 420px;
+    margin-top: 24px;
+    width: 100%;
+  }
+  .merc-hero-webgl-canvas {
+    height: 420px;
+    max-width: 440px;
+    width: 100%;
+    margin: 0 auto;
+  }
+  .merc-hero-ctas {
+    justify-content: center;
+  }
+  .merc-audience-tabs {
+    align-self: center;
+  }
+  .merc-flow-canvas-wrap {
+    height: auto;
+  }
+  .merc-flow-stages {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .merc-journeys-grid,
+  .merc-dev-grid,
+  .merc-sim-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .merc-arch-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .merc-cap-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 2. Tablet Portrait & Mobile Landscape (768px) */
+@media (max-width: 768px) {
+  .merc-btn-primary.merc-nav-cta {
+    padding: 6px 12px;
+    font-size: 0.82rem;
+  }
+  .merc-hero-section {
+    padding: 48px 0 36px;
+  }
+  .merc-hero-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .merc-hero-copy {
+    align-items: center;
+    text-align: center;
+  }
+  .merc-hero-headline {
+    font-size: clamp(1.45rem, 5.5vw, 2.1rem);
+    line-height: 1.15;
+    word-break: normal;
+    hyphens: none;
+  }
+  .merc-kicker {
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.45;
+  }
+  .merc-core-stage {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: auto;
+    margin-top: 16px;
+    width: 100%;
+  }
+  .merc-hero-webgl-canvas {
+    height: 320px;
+    width: 100%;
+    max-width: 360px;
+    margin: 0 auto;
+  }
+  .merc-panel-top-left,
+  .merc-panel-top-right,
+  .merc-panel-bottom-right,
+  .merc-panel-bottom-left,
+  .merc-float-panel {
+    display: none !important;
+  }
+  .merc-hero-mobile-telemetry {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+    width: 100%;
+    max-width: 380px;
+  }
+  .merc-mobile-telemetry-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--merc-border);
+    border-radius: var(--merc-radius-full);
+    padding: 6px 12px;
+    font-family: var(--merc-font-mono);
+    font-size: 0.72rem;
+    color: var(--merc-silver);
+  }
+  .merc-dev-console {
+    padding: 24px 18px;
+  }
+  .merc-journey-card {
+    padding: 24px 18px;
+  }
+  .merc-flow-canvas-wrap {
+    height: auto;
+    margin-bottom: 0;
+  }
+  .merc-flow-stages {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .merc-flow-stage {
+    padding: 12px 14px;
+  }
+  .merc-flow-stage-arrow {
+    transform: rotate(90deg);
+  }
+  .merc-sim-topbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 14px 16px;
+  }
+  .merc-sim-title-group {
+    text-align: left;
+  }
+  .merc-sim-mode-toggle {
+    width: 100%;
+    display: flex;
+  }
+  .merc-sim-mode-toggle button {
+    flex: 1;
+    text-align: center;
+  }
+  .merc-live-config-strip {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 12px 16px;
+  }
+  .merc-sim-pipeline {
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding: 2px;
+  }
+  .merc-sim-step-tab {
+    flex: 0 0 135px;
+    border-right: 1px solid var(--merc-border-subtle);
+    border-bottom: none;
+    padding: 10px 12px;
+  }
+  .merc-sim-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .merc-sim-pane-left {
+    padding: 16px;
+    border-right: none;
+    border-bottom: 1px solid var(--merc-border);
+  }
+  .merc-sim-pane-right {
+    padding: 16px;
+  }
+  .merc-sim-action-row {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .merc-sim-btn {
+    flex: 1;
+    text-align: center;
+  }
+  .merc-arch-grid,
+  .merc-cap-grid,
+  .merc-footer-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .merc-cap-card,
+  .merc-arch-card {
+    padding: 20px 16px;
+  }
+  .merc-cursor-canvas {
+    display: none !important;
+  }
+}
+
+/* 3. Header Status Badge Visibility (<= 640px) */
+@media (max-width: 640px) {
+  .merc-nav .merc-status-badge {
+    display: none;
+  }
+}
+
+/* 4. Phablet & Narrow Handsets (580px) */
+@media (max-width: 580px) {
+  .merc-hero-ctas {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 10px;
+  }
+  .merc-hero-ctas a {
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+  }
+  .merc-audience-tabs {
+    flex-direction: column;
+    width: 100%;
+  }
+  .merc-audience-btn {
+    text-align: center;
+    width: 100%;
+  }
+  .merc-dev-console {
+    padding: 20px 14px;
+  }
+  .merc-journey-card {
+    padding: 24px 16px;
+  }
+}
+
+/* 5. Standard Smartphone (480px down to 375px) */
+@media (max-width: 480px) {
+  .merc-container {
+    padding: 0 16px;
+  }
+  .merc-hero-headline {
+    font-size: clamp(1.35rem, 5.8vw, 1.75rem);
+    line-height: 1.15;
+    word-break: normal;
+  }
+  .merc-kicker {
+    font-size: 0.64rem;
+    padding: 0 4px;
+  }
+  .merc-hero-description {
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+  .merc-core-stage {
+    min-height: auto;
+  }
+  .merc-hero-webgl-canvas {
+    height: 280px;
+    max-width: 300px;
+  }
+  .merc-flow-canvas-wrap {
+    height: auto;
+  }
+  .merc-flow-stage {
+    padding: 12px;
+  }
+  .merc-dev-console {
+    padding: 16px 12px;
+  }
+  .merc-journey-card {
+    padding: 20px 14px;
+  }
+  .merc-cap-card,
+  .merc-arch-card {
+    padding: 16px 12px;
+  }
+  .merc-sim-pane-left,
+  .merc-sim-pane-right {
+    padding: 14px 12px;
+  }
+  .merc-cmd-box {
+    padding: 8px 10px;
+  }
+  .merc-cmd-box code {
+    font-size: 0.74rem;
+  }
+  .merc-sim-action-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .merc-sim-btn {
+    width: 100%;
+  }
+  .merc-params-table {
+    font-size: 0.74rem;
+  }
+}
+
+/* 6. Ultra-Compact Mobile (360px & 320px) */
+@media (max-width: 360px) {
+  .merc-container {
+    padding: 0 12px;
+  }
+  .merc-brand {
+    gap: 6px;
+  }
+  .merc-brand-droplet {
+    width: 26px;
+    height: 26px;
+  }
+  .merc-brand-text {
+    font-size: 0.95rem;
+  }
+  .merc-btn-primary.merc-nav-cta {
+    padding: 5px 9px;
+    font-size: 0.76rem;
+  }
+  .merc-hero-headline {
+    font-size: 1.25rem;
+    line-height: 1.15;
+  }
+  .merc-core-stage {
+    min-height: auto;
+  }
+  .merc-hero-webgl-canvas {
+    height: 230px;
+    max-width: 250px;
+  }
+  .merc-code-block {
+    font-size: 0.70rem;
+  }
+  .merc-mobile-telemetry-pill {
+    padding: 4px 8px;
+    font-size: 0.68rem;
+  }
+  .merc-cmd-box {
+    padding: 6px 8px;
+  }
+  .merc-cmd-box code {
+    font-size: 0.70rem;
+  }
+  .merc-dev-console {
+    padding: 14px 10px;
+  }
+  .merc-cap-card,
+  .merc-arch-card {
+    padding: 14px 10px;
+  }
+  .merc-cap-endpoint {
+    font-size: 0.70rem;
+    padding: 5px 8px;
+  }
+}
+
+/* 7. Reduced Motion Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .mercury-platform *,
+  .mercury-platform *::before,
+  .mercury-platform *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .merc-cursor-canvas {
+    display: none !important;
+  }
+}

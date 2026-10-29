@@ -1,0 +1,72 @@
+@import './styles/theme.css';
+
+/* ==========================================================================
+   OpenPravesh — Global Canvas & Resets
+   Seamless deep obsidian canvas without boundary leakage or white gutters.
+   ========================================================================== */
+
+:root {
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  margin: 0;
+  padding: 0;
+  background-color: #08090B;
+  color: #FFFFFF;
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #08090B;
+  color: #FFFFFF;
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  scrollbar-color: #334155 #08090B;
+  scrollbar-width: thin;
+}
+
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  background-color: #08090B;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Custom WebKit Scrollbar to prevent light track bleed */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #08090B;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #232834;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #384252;
+}
+
+

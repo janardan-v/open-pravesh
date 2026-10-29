@@ -23,8 +23,6 @@ export default class oAuthServices {
     authCode,
   }: tokenGenerationPayload) {
     // look for client exits or not
-    
-    const { redirectUri } = await verifyClient(clientId);
 
     // const client = Object.keys(inMemoryTable).find((key) => key == clientId);
     const clientWithAuthCode = inMemoryTable[authCode];
@@ -32,31 +30,45 @@ export default class oAuthServices {
     if (!clientWithAuthCode) {
       throw ApiError.notFound("No user with this authentication code exist");
     }
+
+    if (clientWithAuthCode.clientId !== clientId) {
+      throw ApiError.unauthorized(
+        "Authorization code was not issued to this client",
+      );
+    }
     // look for secret match with db or not
-    if (clientWithAuthCode.clientSecret !== clientSecret) {
+    const { clientSecret: registeredClientSecret } =
+      await verifyClient(clientId);
+
+    if (registeredClientSecret !== clientSecret) {
       throw ApiError.unauthorized("Client secret is not valid");
     }
     // check if short code is expired or not
-    if (Date.now() > clientWithAuthCode.expiresAt) {
+    if (Date.now() >= clientWithAuthCode.expiresAt) {
       throw ApiError.unauthorized("Authentication code is expired");
     }
 
     // not expired generate access and refresh Token
     const payload = {
       userId: clientWithAuthCode.userId,
-      userEmail: clientWithAuthCode.userEmail
+      userEmail: clientWithAuthCode.userEmail,
     };
 
     const accessToken = generateAccessToken(payload, getPrivateKey());
     const refreshToken = generateRefreshToken(payload, getPrivateKey());
 
+    delete inMemoryTable[authCode];
     return ApiResponse.created("Tokens generated successully", {
       accessToken,
       refreshToken,
     });
   }
 
-  static async authenticateUser({ clientId,userEmail, userId }: authenticateUserData) {
+  static async authenticateUser({
+    clientId,
+    userEmail,
+    userId,
+  }: authenticateUserData) {
     const { clientSecret, redirectUri } = await verifyClient(clientId);
 
     const authenticationCode = crypto.randomBytes(32).toString("hex");
@@ -66,15 +78,15 @@ export default class oAuthServices {
       clientId,
       clientSecret,
       userId: userId,
-      userEmail: userEmail
+      userEmail: userEmail,
     };
-    console.log(inMemoryTable)
+    console.log(inMemoryTable);
 
     const responseUrl = new URL(redirectUri);
-  
+
     return ApiResponse.success("User authenticated", {
       redirectUrl: responseUrl,
-      shortCode: authenticationCode
+      shortCode: authenticationCode,
     });
   }
 }

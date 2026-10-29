@@ -86,11 +86,11 @@ export default class clientServices {
     // return it in url
     return ApiResponse.success("Client found successfully", {
       clientId: clientEmailResult.clientId,
+      clientSecret: clientEmailResult.clientSecrert,
       clientSecrert: clientEmailResult.clientSecrert,
       redirectUri: clientEmailResult.redirectUri,
       hostedUri: clientEmailResult.hostedUri,
     });
   }
 
-  static async getUser(acceessToken: string) {}
 }

@@ -27,3 +27,27 @@ export async function registerClient(
 
   return response.data
 }
+
+
+export type ClientLoginInput = {
+  email: string
+  password: string
+}
+
+export type ClientLoginResult = {
+  clientId: string
+  clientSecret: string
+  redirectUri: string
+  hostedUri: string
+}
+
+export async function loginClient(
+  data: ClientLoginInput,
+): Promise<ApiResponse<ClientLoginResult>> {
+  const response = await api.post<ApiResponse<ClientLoginResult>>(
+    '/client-login',
+    data,
+  )
+
+  return response.data
+}
