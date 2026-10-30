@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 export const CLIENT_TOKEN_KEY = 'openpravesh_client_token'
+export const CLIENT_EMAIL_KEY = 'openpravesh_client_email'
 
 export function getClientToken(): string | null {
   try {
@@ -10,10 +11,22 @@ export function getClientToken(): string | null {
   }
 }
 
-export function setClientToken(token: string): void {
+export function getClientEmail(): string | null {
+  try {
+    return localStorage.getItem(CLIENT_EMAIL_KEY) || sessionStorage.getItem(CLIENT_EMAIL_KEY)
+  } catch {
+    return null
+  }
+}
+
+export function setClientToken(token: string, email?: string): void {
   try {
     localStorage.setItem(CLIENT_TOKEN_KEY, token)
     sessionStorage.setItem(CLIENT_TOKEN_KEY, token)
+    if (email) {
+      localStorage.setItem(CLIENT_EMAIL_KEY, email)
+      sessionStorage.setItem(CLIENT_EMAIL_KEY, email)
+    }
   } catch (e) {
     console.error('Failed to save client auth token:', e)
   }
@@ -23,6 +36,8 @@ export function removeClientToken(): void {
   try {
     localStorage.removeItem(CLIENT_TOKEN_KEY)
     sessionStorage.removeItem(CLIENT_TOKEN_KEY)
+    localStorage.removeItem(CLIENT_EMAIL_KEY)
+    sessionStorage.removeItem(CLIENT_EMAIL_KEY)
     sessionStorage.removeItem('developerClient')
   } catch (e) {
     console.error('Failed to remove client auth token:', e)

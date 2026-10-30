@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, Link, useNavigate, redirect } from '@tanstack/react-router'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import axios from 'axios'
 import { OpenPraveshLogo } from '../components/OpenPraveshLogo'
@@ -9,7 +9,7 @@ import {
   createNewApplication,
   logoutClient,
 } from '../services/clientAuthServices'
-import { getClientToken } from '../services/api'
+import { getClientToken, getClientEmail } from '../services/api'
 import type { ClientApplication, CreateApplicationResult } from '../types/api'
 import '../styles/pages/developer.css'
 
@@ -22,6 +22,11 @@ interface NewAppFormData {
 }
 
 export const Route = createFileRoute('/developer')({
+  beforeLoad: () => {
+    if (!getClientToken()) {
+      throw redirect({ to: '/client/login' })
+    }
+  },
   component: DeveloperDashboard,
 })
 
@@ -29,7 +34,7 @@ function DeveloperDashboard() {
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState<TabKey>('overview')
   const [loading, setLoading] = useState(true)
-  const [developerEmail, setDeveloperEmail] = useState<string | null>(null)
+  const [developerEmail, setDeveloperEmail] = useState<string | null>(() => getClientEmail())
   const [applications, setApplications] = useState<ClientApplication[]>([])
   const [selectedApp, setSelectedApp] = useState<ClientApplication | null>(null)
   const [inspectModalOpen, setInspectModalOpen] = useState(false)
@@ -58,7 +63,7 @@ function DeveloperDashboard() {
   const loadDashboardData = useCallback(async () => {
     const token = getClientToken()
     if (!token) {
-      setLoading(false)
+      await navigate({ to: '/client/login' })
       return
     }
 
@@ -75,9 +80,7 @@ function DeveloperDashboard() {
 
       if (appsRes.success && appsRes.data) {
         setApplications(appsRes.data)
-        if (appsRes.data.length > 0 && !selectedApp) {
-          setSelectedApp(appsRes.data[0] || null)
-        }
+        setSelectedApp((prev) => prev || appsRes.data[0] || null)
       }
     } catch (error) {
       console.error('Error fetching developer dashboard data:', error)
@@ -85,11 +88,12 @@ function DeveloperDashboard() {
         logoutClient()
         setDeveloperEmail(null)
         setApplications([])
+        await navigate({ to: '/client/login' })
       }
     } finally {
       setLoading(false)
     }
-  }, [selectedApp])
+  }, [navigate])
 
   useEffect(() => {
     loadDashboardData()
@@ -846,7 +850,7 @@ curl -X POST "http://localhost:8000/v1/token/${primaryApp.clientId}/<YOUR_CLIENT
             )}
           </>
         ) : (
-          /* Empty / Unauthenticated Developer State */
+          /* Empty / Unauthenticated Developer State (fallback if beforeLoad redirect was bypassed) */
           <div className="merc-glass-card merc-dev-empty">
             <div className="merc-dev-empty-icon" aria-hidden="true">
               <svg

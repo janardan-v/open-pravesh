@@ -1,12 +1,18 @@
-import { useState } from 'react'
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { useState, useEffect } from 'react'
+import { createFileRoute, Link, useNavigate, redirect } from '@tanstack/react-router'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import axios from 'axios'
 import { OpenPraveshLogo } from '../../components/OpenPraveshLogo'
 import { loginClient, type ClientLoginInput } from '../../services/clientAuthServices'
+import { getClientToken } from '../../services/api'
 import '../../styles/pages/auth.css'
 
 export const Route = createFileRoute('/client/login')({
+  beforeLoad: () => {
+    if (getClientToken()) {
+      throw redirect({ to: '/developer' })
+    }
+  },
   component: ClientLoginPage,
 })
 
@@ -14,6 +20,13 @@ function ClientLoginPage() {
   const navigate = useNavigate()
   const [apiError, setApiError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // Double check on mount in case token was added in same session
+  useEffect(() => {
+    if (getClientToken()) {
+      navigate({ to: '/developer' })
+    }
+  }, [navigate])
 
   const {
     register,
@@ -32,16 +45,6 @@ function ClientLoginPage() {
         return
       }
 
-      // Store in session with clientSecret and redirect to developer dashboard
-      sessionStorage.setItem(
-        'developerClient',
-        JSON.stringify({
-          clientId: result.data.clientId,
-          clientSecret: result.data.clientSecret || (result.data as unknown as { clientSecrert?: string }).clientSecrert || '',
-          hostedUri: result.data.hostedUri,
-          redirectUri: result.data.redirectUri,
-        }),
-      )
       await navigate({ to: '/developer' })
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -109,20 +112,20 @@ function ClientLoginPage() {
 
             <div className="merc-form-group">
               <label htmlFor="email" className="merc-label">
-                Developer Email
+                Developer Account Email
               </label>
               <input
                 id="email"
                 type="email"
                 autoComplete="email"
-                placeholder="developer@yourdomain.com"
+                placeholder="developer@openpravesh.org"
                 className="merc-input"
                 aria-invalid={!!errors.email}
                 {...register('email', {
-                  required: 'Email address is required',
+                  required: 'Email address is required.',
                   pattern: {
                     value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                    message: 'Enter a valid email address',
+                    message: 'Enter a valid email address.',
                   },
                 })}
               />
@@ -131,7 +134,7 @@ function ClientLoginPage() {
 
             <div className="merc-form-group">
               <label htmlFor="password" className="merc-label">
-                Password
+                Developer Password
               </label>
               <input
                 id="password"
@@ -141,7 +144,7 @@ function ClientLoginPage() {
                 className="merc-input"
                 aria-invalid={!!errors.password}
                 {...register('password', {
-                  required: 'Password is required',
+                  required: 'Password is required.',
                 })}
               />
               {errors.password && <p className="merc-error-text">{errors.password.message}</p>}
@@ -153,24 +156,14 @@ function ClientLoginPage() {
               className="merc-btn-primary"
               style={{ width: '100%', marginTop: '6px' }}
             >
-              {isSubmitting ? (
-                <>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="animate-spin" aria-hidden="true">
-                    <circle cx="12" cy="12" r="10" strokeOpacity="0.25" />
-                    <path d="M12 2a10 10 0 0 1 10 10" />
-                  </svg>
-                  Authenticating...
-                </>
-              ) : (
-                'Sign In to Console'
-              )}
+              {isSubmitting ? 'Authenticating...' : 'Sign In to Developer Console'}
             </button>
           </form>
 
           <footer className="merc-auth-footer">
             <p>
-              New to OpenPravesh?{' '}
-              <Link to="/client/register">Register a client application</Link>
+              Need to register a new application?{' '}
+              <Link to="/client/register">Register Client</Link>
             </p>
           </footer>
         </section>

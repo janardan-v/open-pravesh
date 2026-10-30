@@ -35,7 +35,7 @@ export async function registerClient(
   )
 
   if (response.data.success && response.data.data?.token) {
-    setClientToken(response.data.data.token)
+    setClientToken(response.data.data.token, response.data.data.email || data.email)
   }
 
   return response.data
@@ -68,7 +68,7 @@ export async function loginClient(
   )
 
   if (response.data.success && response.data.data?.token) {
-    setClientToken(response.data.data.token)
+    setClientToken(response.data.data.token, response.data.data.email || data.email)
   }
 
   return response.data

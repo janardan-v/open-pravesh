@@ -5,6 +5,7 @@ import { LiquidMercuryCursor } from '../components/LiquidMercuryCursor'
 import { KineticFlowMesh } from '../components/KineticFlowMesh'
 import { OpenPraveshLogo } from '../components/OpenPraveshLogo'
 import { LiquidVaporChamber } from '../components/LiquidVaporChamber'
+import { getClientToken } from '../services/api'
 import '../styles/pages/home.css'
 
 export const Route = createFileRoute('/')({
@@ -353,6 +354,11 @@ export function LandingPage() {
   const [simMode, setSimMode] = useState<'guided' | 'live'>('guided')
   const [integrationTab, setIntegrationTab] = useState<'v6' | 'v5' | 'fetch'>('v6')
   const [copiedKey, setCopiedKey] = useState<string | null>(null)
+  const [isClientLoggedIn, setIsClientLoggedIn] = useState<boolean>(false)
+
+  useEffect(() => {
+    setIsClientLoggedIn(Boolean(getClientToken()))
+  }, [])
 
   // Close mobile drawer on Escape key & manage scroll lock
   useEffect(() => {
@@ -494,8 +500,8 @@ export function LandingPage() {
               <Link to="/register" className="merc-btn-secondary merc-nav-user-btn">
                 User Portal
               </Link>
-              <Link to="/client/login" className="merc-btn-secondary merc-nav-dev-btn">
-                Developer Portal
+              <Link to="/developer" className="merc-btn-secondary merc-nav-dev-btn">
+                {isClientLoggedIn ? 'Developer Console' : 'Developer Portal'}
               </Link>
               <a href="#simulator" className="merc-btn-primary merc-nav-cta">
                 <span className="merc-nav-cta-full">Launch Simulator</span>
@@ -559,7 +565,7 @@ export function LandingPage() {
             </div>
             <ul className="merc-mobile-nav-list">
               <li><Link to="/register" onClick={() => setMobileMenuOpen(false)}>User Portal (Account)</Link></li>
-              <li><Link to="/client/login" onClick={() => setMobileMenuOpen(false)}>Developer Portal</Link></li>
+              <li><Link to="/developer" onClick={() => setMobileMenuOpen(false)}>{isClientLoggedIn ? 'Developer Console' : 'Developer Portal'}</Link></li>
               <li><a href="#simulator" onClick={() => setMobileMenuOpen(false)}>Interactive Simulator</a></li>
               <li><a href="#journeys" onClick={() => setMobileMenuOpen(false)}>Dual Journeys</a></li>
               <li><a href="#topology" onClick={() => setMobileMenuOpen(false)}>Architecture Topology</a></li>
@@ -583,8 +589,8 @@ export function LandingPage() {
             <Link to="/register" className="merc-btn-secondary" onClick={() => setMobileMenuOpen(false)}>
               User Portal
             </Link>
-            <Link to="/client/login" className="merc-btn-secondary" onClick={() => setMobileMenuOpen(false)}>
-              Developer Portal
+            <Link to="/developer" className="merc-btn-secondary" onClick={() => setMobileMenuOpen(false)}>
+              {isClientLoggedIn ? 'Developer Console' : 'Developer Portal'}
             </Link>
             <a href="#simulator" className="merc-btn-primary" onClick={() => setMobileMenuOpen(false)}>
               Launch Simulator
@@ -1454,7 +1460,7 @@ export function LandingPage() {
               <h5>Access Portals</h5>
               <ul>
                 <li><Link to="/client/register">Register Client Application</Link></li>
-                <li><Link to="/client/login">Developer Portal Sign In</Link></li>
+                <li><Link to="/developer">Developer Console</Link></li>
                 <li><Link to="/register">Create User Account</Link></li>
                 <li>
                   <a href="https://github.com/janardan-v/open-pravesh" target="_blank" rel="noopener noreferrer">

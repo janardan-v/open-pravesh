@@ -66,7 +66,7 @@ function UserRegister() {
             <Link to="/" className="merc-nav-link">
               Home
             </Link>
-            <Link to="/client/login" className="merc-nav-link">
+            <Link to="/developer" className="merc-nav-link">
               Developer Portal
             </Link>
             <Link to="/docs" className="merc-nav-link">
@@ -207,7 +207,7 @@ function UserRegister() {
 
                 <div className="merc-form-group">
                   <label htmlFor="dateOfBirth" className="merc-label">
-                    Date of Birth <span style={{ color: 'var(--merc-text-muted)', fontSize: '0.78rem' }}>(optional)</span>
+                    Date of Birth *
                   </label>
                   <input
                     id="dateOfBirth"
@@ -215,7 +215,9 @@ function UserRegister() {
                     autoComplete="bday"
                     className="merc-input"
                     aria-invalid={!!errors.dateOfBirth}
-                    {...register('dateOfBirth')}
+                    {...register('dateOfBirth', {
+                      required: 'Date of birth is required.',
+                    })}
                   />
                   {errors.dateOfBirth && <p className="merc-error-text">{errors.dateOfBirth.message}</p>}
                 </div>
