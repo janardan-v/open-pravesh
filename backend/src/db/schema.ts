@@ -20,8 +20,8 @@ export const clientsTable = pgTable("clients", {
   id: uuid("id").primaryKey().defaultRandom(),
   clientName: varchar("cleint_name", { length: 255 }).notNull(),
   clientSecret: text("client_secret").notNull(),
-  email: varchar({ length: 255 }).notNull().unique(),
+  email: varchar({ length: 255 }).notNull(),
   password: text().notNull(),
-  redirectUri:text("redirect_uri").notNull(),
-  hostedUri:text("hosted_uri")
+  redirectUri: text("redirect_uri").notNull(),
+  hostedUri: text("hosted_uri"),
 });

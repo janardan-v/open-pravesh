@@ -1,12 +1,16 @@
-import type { clientRegisterData, clientLoginData } from "./clientModel";
+import type {
+  clientRegisterData,
+  clientLoginData,
+  CreateAppData,
+} from "./clientModel";
 import { clientsTable } from "../../db/schema";
 import db from "../../db/index";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import ApiError from "../../common/utils/apiError";
 import ApiResponse from "../../common/utils/apiResponse";
 import crypto from "crypto";
-
-import { password as psw } from "bun"; // using inBuilt library of bun to hash and verify the password
+import { password as psw } from "bun";
+import { generateClientToken } from "./clientUtils/jwt.utils";
 
 export default class clientServices {
   static async register({
@@ -16,17 +20,20 @@ export default class clientServices {
     hostedUri,
     redirectUri,
   }: clientRegisterData) {
-    const clientEmailResult = await db
-      .select()
+    const existingClients = await db
+      .select({ id: clientsTable.id })
       .from(clientsTable)
       .where(eq(clientsTable.email, email));
 
-    if (clientEmailResult.length > 0) {
-      throw ApiError.badRequest("Email already exists");
+    if (existingClients.length > 0) {
+      throw ApiError.badRequest(
+        "An account with this email already exists. Please sign in to your developer console.",
+      );
     }
 
     const hashedPassword = await psw.hash(password);
-    const clientSecret = crypto.createHash("sha256").digest("hex");
+    const clientSecret = crypto.randomBytes(32).toString("hex");
+
     const [insertResult] = await db
       .insert(clientsTable)
       .values({
@@ -34,63 +41,175 @@ export default class clientServices {
         clientSecret,
         email,
         password: hashedPassword,
-        hostedUri,
+        hostedUri: hostedUri || "",
         redirectUri,
       })
       .returning({ id: clientsTable.id });
 
     if (!insertResult) {
-      throw ApiError.internalServerError("Error while creating client");
+      throw ApiError.internalServerError("Error while creating client application");
     }
+
+    const token = generateClientToken({
+      email,
+      clientId: insertResult.id,
+    });
 
     return ApiResponse.created("Client registered successfully", {
       clientId: insertResult.id,
       clientSecret,
-      hostedUri,
+      clientName,
+      email,
+      hostedUri: hostedUri || "",
       redirectUri,
+      token,
+      accessToken: token,
     });
   }
 
   static async login({ email, password: userPass }: clientLoginData) {
-    // take credentials and look for user in db
-    const [clientEmailResult] = await db
+    const clients = await db
       .select({
         clientId: clientsTable.id,
+        clientName: clientsTable.clientName,
         email: clientsTable.email,
         hashedPass: clientsTable.password,
-        clientSecrert: clientsTable.clientSecret,
+        clientSecret: clientsTable.clientSecret,
         redirectUri: clientsTable.redirectUri,
         hostedUri: clientsTable.hostedUri,
       })
       .from(clientsTable)
       .where(eq(clientsTable.email, email));
 
-    // if user not found, throw error
-    if (!clientEmailResult) {
-      throw ApiError.badRequest("Client do not exists");
+    if (!clients || clients.length === 0) {
+      throw ApiError.badRequest("No client account found with this email");
     }
 
-    // if user found, check for password
-    const isPasswordValid = await psw.verify(
-      userPass,
-      clientEmailResult.hashedPass!,
-    );
+    const primaryClient = clients[0];
+    if (!primaryClient) {
+      throw ApiError.badRequest("No client account found with this email");
+    }
 
-    //  invalid password, throw error
+    const isPasswordValid = await psw.verify(userPass, primaryClient.hashedPass);
+
     if (!isPasswordValid) {
       throw ApiError.unauthorized("Invalid email or password");
     }
 
-    // if all good
-    // generate a short code
-    // return it in url
-    return ApiResponse.success("Client found successfully", {
-      clientId: clientEmailResult.clientId,
-      clientSecret: clientEmailResult.clientSecrert,
-      clientSecrert: clientEmailResult.clientSecrert,
-      redirectUri: clientEmailResult.redirectUri,
-      hostedUri: clientEmailResult.hostedUri,
+    const token = generateClientToken({
+      email: primaryClient.email,
+      clientId: primaryClient.clientId,
+    });
+
+    return ApiResponse.success("Client authenticated successfully", {
+      token,
+      accessToken: token,
+      email: primaryClient.email,
+      clientId: primaryClient.clientId,
+      clientName: primaryClient.clientName,
+      clientSecret: primaryClient.clientSecret,
+      clientSecrert: primaryClient.clientSecret, // compatibility fallback
+      redirectUri: primaryClient.redirectUri,
+      hostedUri: primaryClient.hostedUri,
+      totalApplications: clients.length,
     });
   }
 
+  static async getMe(email: string) {
+    const clients = await db
+      .select({
+        clientId: clientsTable.id,
+        clientName: clientsTable.clientName,
+        email: clientsTable.email,
+        redirectUri: clientsTable.redirectUri,
+        hostedUri: clientsTable.hostedUri,
+      })
+      .from(clientsTable)
+      .where(eq(clientsTable.email, email));
+
+    if (!clients || clients.length === 0) {
+      throw ApiError.notFound("Developer account not found");
+    }
+
+    return ApiResponse.success("Developer profile retrieved", {
+      email,
+      totalApplications: clients.length,
+      applications: clients,
+    });
+  }
+
+  static async getApplications(email: string) {
+    const apps = await db
+      .select({
+        clientId: clientsTable.id,
+        clientName: clientsTable.clientName,
+        email: clientsTable.email,
+        redirectUri: clientsTable.redirectUri,
+        hostedUri: clientsTable.hostedUri,
+      })
+      .from(clientsTable)
+      .where(eq(clientsTable.email, email));
+
+    return ApiResponse.success("Registered applications retrieved", apps);
+  }
+
+  static async getApplicationById(email: string, clientId: string) {
+    const [app] = await db
+      .select({
+        clientId: clientsTable.id,
+        clientName: clientsTable.clientName,
+        email: clientsTable.email,
+        redirectUri: clientsTable.redirectUri,
+        hostedUri: clientsTable.hostedUri,
+      })
+      .from(clientsTable)
+      .where(and(eq(clientsTable.id, clientId), eq(clientsTable.email, email)));
+
+    if (!app) {
+      throw ApiError.notFound("Application not found or access denied");
+    }
+
+    return ApiResponse.success("Application details retrieved", app);
+  }
+
+  static async createApplication(
+    email: string,
+    { clientName, redirectUri, hostedUri }: CreateAppData,
+  ) {
+    const [owner] = await db
+      .select({ password: clientsTable.password })
+      .from(clientsTable)
+      .where(eq(clientsTable.email, email));
+
+    if (!owner) {
+      throw ApiError.unauthorized("Developer account not found");
+    }
+
+    const clientSecret = crypto.randomBytes(32).toString("hex");
+
+    const [insertResult] = await db
+      .insert(clientsTable)
+      .values({
+        clientName,
+        clientSecret,
+        email,
+        password: owner.password,
+        hostedUri: hostedUri || "",
+        redirectUri,
+      })
+      .returning({ id: clientsTable.id });
+
+    if (!insertResult) {
+      throw ApiError.internalServerError("Error creating application");
+    }
+
+    return ApiResponse.created("Application registered successfully", {
+      clientId: insertResult.id,
+      clientSecret,
+      clientName,
+      email,
+      redirectUri,
+      hostedUri: hostedUri || "",
+    });
+  }
 }

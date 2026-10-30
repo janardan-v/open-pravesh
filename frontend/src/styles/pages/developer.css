@@ -5,12 +5,12 @@
 .merc-dev-container {
   max-width: var(--merc-container-max);
   margin: 0 auto;
-  padding: 36px 24px 80px;
+  padding: 32px 24px 80px;
   width: 100%;
 }
 
 .merc-dev-header {
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
 .merc-dev-eyebrow {
@@ -43,6 +43,76 @@
   font-size: 0.96rem;
   margin: 8px 0 0;
   max-width: 680px;
+}
+
+/* User Account Chip in Nav */
+.merc-nav-user-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--merc-border);
+  border-radius: 9999px;
+  font-size: 0.82rem;
+  color: var(--merc-silver);
+  font-family: var(--merc-font-mono);
+}
+
+.merc-nav-user-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--merc-signal-green);
+  box-shadow: 0 0 8px var(--merc-signal-green);
+}
+
+/* Developer Console Navigation Tabs */
+.merc-dev-nav-tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--merc-border-subtle);
+  padding-bottom: 12px;
+  margin-bottom: 28px;
+  overflow-x: auto;
+}
+
+.merc-dev-nav-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--merc-radius-sm);
+  color: var(--merc-text-secondary);
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.16s ease;
+  white-space: nowrap;
+}
+
+.merc-dev-nav-tab:hover {
+  color: var(--merc-text-primary);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.merc-dev-nav-tab.active {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--merc-border-active);
+  font-weight: 600;
+}
+
+.merc-dev-tab-count {
+  padding: 1px 7px;
+  border-radius: 9999px;
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--merc-signal-cyan);
+  font-size: 0.74rem;
+  font-weight: 600;
 }
 
 /* Stats Row */
@@ -178,6 +248,103 @@
   border-color: var(--merc-border-active);
 }
 
+/* Application Cards Grid */
+.merc-apps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 20px;
+}
+
+.merc-app-card {
+  background: var(--merc-surface-glass);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--merc-border);
+  border-radius: var(--merc-radius-md);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.merc-app-card:hover {
+  border-color: var(--merc-border-active);
+  transform: translateY(-2px);
+}
+
+.merc-app-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.merc-app-name {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--merc-text-primary);
+  margin: 0 0 4px;
+}
+
+.merc-app-badge {
+  padding: 2px 8px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.28);
+  color: var(--merc-signal-green);
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.merc-app-id-box {
+  background: var(--merc-code-bg);
+  border: 1px solid var(--merc-border-subtle);
+  border-radius: var(--merc-radius-sm);
+  padding: 8px 10px;
+  font-family: var(--merc-font-mono);
+  font-size: 0.8rem;
+  color: var(--merc-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.merc-app-id-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.merc-app-meta-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: var(--merc-text-muted);
+}
+
+.merc-app-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.merc-app-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding-top: 12px;
+  border-top: 1px solid var(--merc-border-subtle);
+}
+
 /* Endpoints Grid */
 .merc-endpoints-table {
   width: 100%;
@@ -240,6 +407,119 @@
   line-height: 1.5;
 }
 
+/* Modal Overlay */
+.merc-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.merc-modal-window {
+  background: var(--merc-surface);
+  border: 1px solid var(--merc-border-active);
+  border-radius: var(--merc-radius-lg);
+  width: 100%;
+  max-width: 680px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--merc-shadow-lg);
+  padding: 28px;
+  position: relative;
+}
+
+.merc-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--merc-border-subtle);
+  margin-bottom: 20px;
+}
+
+.merc-modal-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--merc-text-primary);
+  margin: 0;
+}
+
+.merc-modal-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--merc-text-secondary);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.merc-modal-close-btn:hover {
+  color: #FFFFFF;
+}
+
+/* Dashboard Alert Banners */
+.merc-alert {
+  padding: 14px 16px;
+  border-radius: var(--merc-radius-sm);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 20px;
+  font-size: 0.88rem;
+}
+
+.merc-alert-success {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #A7F3D0;
+}
+
+.merc-alert-warning {
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #FDE68A;
+}
+
+.merc-alert-error {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #FECACA;
+}
+
+/* Loading State */
+.merc-loading-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  gap: 16px;
+  color: var(--merc-text-secondary);
+}
+
+.merc-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--merc-signal-cyan);
+  border-radius: 50%;
+  animation: mercSpin 0.8s linear infinite;
+}
+
+@keyframes mercSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* Empty State */
 .merc-dev-empty {
   text-align: center;
@@ -279,5 +559,9 @@
   .merc-endpoints-table th:nth-child(3),
   .merc-endpoints-table td:nth-child(3) {
     display: none;
+  }
+
+  .merc-apps-grid {
+    grid-template-columns: 1fr;
   }
 }
